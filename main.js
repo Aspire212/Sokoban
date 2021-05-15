@@ -7,10 +7,10 @@ cvs.height = document.documentElement.clientHeight
 
 //Данные о картинках
 const srcImgData = {
-    marioR: './img/marioR.png',
+    marioR: './img/Player/player_11.png',
     box: './img/box.png',
-    brick: './img/brick.png',
-    stone: './img/stone.jpg',
+    brick: './img/Blocks/block_04.png',
+    stone: './img/Blocks/block_06.png',
 };
 
 //данные о персонаже
@@ -212,6 +212,19 @@ function gameInfo() {};
 //рестарт
 function restart() {};
 
+//загрузка карт из json
+/*
+
+    function startGame(){
+
+        $.getJSON("maps.json", function(data) {
+            mapsObject = data;
+            console.log(data);
+            myGameCanvas = new Game(mapsObject);
+            myGameCanvas.start(0);
+        });
+    }
+*/
 /*function paintElem(x, y, lvl) {
     let temp = lvl[y][x];
     switch (temp) {
