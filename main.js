@@ -146,13 +146,14 @@ function doMove(dx, dy, lvl) {
         if (['#', '%', '*'].includes(res1)) {
             return 0;
         }
+        let img;
         // Иначе сдвинуть ящик
+        //ctx.clearRect(px * bSz, py * bSz, bSz, bSz);
         lvl[py + dy][px + dx] = (res0 == '%' ? 'x' : ' ');
+        res0 == '%' ? img = place : ' '
         ctx.clearRect((px + dx) * bSz, (py + dy) * bSz, bSz, bSz, bSz);
         lvl[py + 2 * dy][px + 2 * dx] = (res1 == 'x' ? '%' : '*');
-        let img;
         //доделать отрисовку
-        res0 == '%' ? img = place : ' '
         res1 == 'x' ? img = succes : img = box
         console.log(img)
         ctx.drawImage(img, (px + 2 * dx) * bSz, (py + 2 * dy) * bSz, bSz, bSz);
