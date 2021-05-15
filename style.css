@@ -1,0 +1,37 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    overflow: hidden;
+}
+
+.wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+}
+
+#cvs {
+    background: #000;
+}
+
+.up,
+.lr,
+.down {
+    display: flex;
+    justify-content: center;
+}
+
+.up button,
+.lr button,
+.down button {
+    margin: 10px;
+    width: 70px;
+    height: 20px;
+}
