@@ -19,12 +19,16 @@ const player = {
     view: false, //true лево false право
 }
 
+
 const bSz = 40;
 
 const imgSprite = {};
+let n = 0;
+
+
 loadImage(imgSprite, srcImgData);
-const dataLvl = {
-    lvl3: [
+const dataLvl = [
+    [
         ".....................",
         ".....#####...........",
         ".....#   #...........",
@@ -33,13 +37,13 @@ const dataLvl = {
         "...#  * * #..........",
         ".### # ## #...######.",
         ".#   # ## #####  xx#.",
-        ".# *  *  @        xx#.",
+        ".# *  *  @       xx#.",
         ".##### ### # ##  xx#.",
         ".....#     #########.",
         ".....#######.........",
         ".....................",
     ],
-    lvl1: [
+    [
         "#####################",
         "#                   #",
         "#                   #",
@@ -54,12 +58,10 @@ const dataLvl = {
         "#                   #",
         "#####################",
 
-    ]
-}
-const {
-    lvl1
-} = dataLvl;
-let tempLvl = lvl1.map(str => [...str]);
+    ],
+]
+
+let tempLvl = dataLvl[n].map(str => [...str]);
 const {
     marioR,
     marioL,
@@ -73,12 +75,11 @@ window.addEventListener('load', () => game());
 function game() {
     render(tempLvl);
     window.addEventListener('keydown', (e) => {
-        console.log(e)
         let route = e.key;
         let dx = 0;
         let dy = 0;
-        let [px, py] = [player.x, player.y];
         let move;
+        let [px, py] = [player.x, player.y];
         if (route === 'ArrowRight') {
             dx = 1
             dy = 0
@@ -99,27 +100,15 @@ function game() {
             dy = 1;
         };
         move = doMove(dx, dy);
-        //добавить транспортировку ящика
-        console.log(move)
-
         if (move) {
+            //стираю персонаж
             ctx.clearRect(player.x * bSz, player.y * bSz, bSz, bSz);
+            //меняю его координаты
             player.x += dx
             player.y += dy
+                //отрисовываю персонажа
             ctx.drawImage(player.view ? marioL : marioR, player.x * bSz, player.y * bSz, 40, 40)
-                //отрисовываем ящик
-            if (move === 2) {
-
-            }
-            //console.log(px+dx*move, py+dy*move, "coord")
-
-
-
-            e.target.addEventListener('touchend', () => clearInterval(move));
         }
-
-
-
     });
 }
 //переделать
@@ -128,21 +117,21 @@ function doMove(dx, dy) {
     // Текущее положение игрока
     let [px, py] = [player.x, player.y];
     // Проверить что впереди
-    let b0 = tempLvl[py + dy][px + dx];
+    let res0 = tempLvl[py + dy][px + dx];
     // Если впереди стена, то  нельзя
-    if (b0 === '#') return 0;
+    if (res0 === '#') return 0;
     // Есть ящик, проверить возможности сдвинуть его
-    if (b0 === '*' || b0 === '%') {
-        let b1 = tempLvl[py + 2 * dy][px + 2 * dx];
+    if (res0 === '*' || res0 === '%') {
+        let res1 = tempLvl[py + 2 * dy][px + 2 * dx];
 
         // Впереди ящика стена или другой ящик, нельзя двинуться
-        if (['#', '%', '*'].includes(b1)) return 0;
+        if (['#', '%', '*'].includes(res1)) return 0;
         // Иначе сдвинуть ящик
-        tempLvl[py + dy][px + dx] = (b0 == '%' ? 'x' : ' ');
+        tempLvl[py + dy][px + dx] = (res0 == '%' ? 'x' : ' ');
 
-        ctx.clearRect((px + dx) * bSz, (py + dy) * bSz, bSz, bSz);
+        ctx.clearRect((px + dx) * bSz, (py + dy) * bSz, bSz, bSz, bSz);
 
-        tempLvl[py + 2 * dy][px + 2 * dx] = (b1 == 'x' ? '%' : '*');
+        tempLvl[py + 2 * dy][px + 2 * dx] = (res1 == 'x' ? '%' : '*');
         ctx.drawImage(box, (px + 2 * dx) * bSz, (py + 2 * dy) * bSz, bSz, bSz)
         return 2;
     }
@@ -172,25 +161,40 @@ function paintElem(x, y, lvl) {
     }
 }
 
+
+function draw(el, x, y, sz) {
+    if (Array.isArray(el)) {
+        switch (el[y][x]) {
+            case "#":
+                ctx.drawImage(brick, x * sz, y * sz, sz, sz);
+                break;
+            case '@':
+                ctx.drawImage(player.view ? marioL : marioR, x * sz, y * sz, sz, sz);
+                player.x = x;
+                player.y = y;
+                break;
+            case '*':
+                ctx.drawImage(box, x * sz, y * sz, sz, sz);
+                break;
+            case '.':
+                ctx.drawImage(stone, x * sz, y * sz, sz, sz);
+                break;
+        }
+    } else {
+        ctx.drawImage(el, x * sz, y * sz, sz, sz);
+    }
+};
+
+function clear(x, y, sz) {
+    return ctx.clearRect(x * sz, y * sz, sz, sz);
+};
+
+
+
 function render(lvl) {
     for (let y = 0; y < lvl.length; y++) {
         for (let x = 0; x < lvl[y].length; x++) {
-            switch (lvl[y][x]) {
-                case "#":
-                    ctx.drawImage(brick, x * bSz, y * bSz, bSz, bSz)
-                    break;
-                case '@':
-                    ctx.drawImage(player.view ? marioL : marioR, x * bSz, y * bSz, bSz, bSz)
-                    player.x = x;
-                    player.y = y;
-                    break;
-                case '*':
-                    ctx.drawImage(box, x * bSz, y * bSz, bSz, bSz)
-                    break;
-                case '.':
-                    ctx.drawImage(stone, x * bSz, y * bSz, bSz, bSz)
-                    break;
-            }
+            draw(lvl, x, y, bSz);
         }
     }
 }
@@ -220,7 +224,7 @@ function loadedLvl(v) {
 function gameInfo() {}
 
 
-function draw(el, x, y, sz) {
+/*function draw(el, x, y, sz) {
     if (typeof el === "string") {
         el === '*' ? el = box : ''
         el === ''
@@ -228,100 +232,100 @@ function draw(el, x, y, sz) {
     } else {
         return ctx.drawImage(el, x * sz, y * sz, sz, sz);
     }
+}*/
+
+
+/*const data = {
+  boxes: [],
+  sides: [],
+  pers: {},
+  dots: [],
+}
+let sz = 50;
+for (let y = 0; y < lvl.length; y++) {
+  for (let x = 0; x < lvl[y].length; x++) {
+    if (lvl[y][x] === 1) {
+      let side = new Block(x * sz, y * sz);
+      data.sides.push(side);
+      ctx.fillStyle = 'darkblue';
+      draw(x * sz, y * sz, sz)
+    }
+    if (lvl[y][x] === 2) {
+      data.pers.x = x * sz;
+      data.pers.y = y * sz;
+      ctx.fillStyle = 'green';
+      draw(x * sz, y * sz, sz);
+    }
+    if (lvl[y][x] === 3) {
+      let box = new Block(x * sz, y * sz);
+      data.boxes.push(box);
+      ctx.fillStyle = 'brown';
+      draw(x * sz, y * sz, sz);
+    }
+    if (lvl[y][x] === 4) {
+      let dot = new Block(x * sz, y * sz);
+      data.dots.push(dot);
+      ctx.fillStyle = 'rgba(0, 150, 150, 0.4)';
+      draw(x * sz, y * sz, sz)
+    }
+  }
+}
+const move = [data.pers]
+let run;
+btnBlock.addEventListener('touchstart', (e) => {
+  if (e.target.dataset.key) {
+    let route = e.target.dataset.key;
+    run = setInterval(() => movement(move, lvl, route), 200)
+  }
+  e.target.addEventListener('touchend', () => stopMovement(run));
+})
+
+function movement(mv, lvl, key) {
+  mv.forEach(p => {
+    clear(p.x, p.y, sz);
+    if (key === 'r')  p.x += 50;
+    if (key === 'l')  p.x -= 50;
+    if (key === 'u')  p.y -= 50;
+    if (key === 'd')  p.y += 50;
+    ctx.fillStyle = 'green'
+    draw(p.x, p.y, sz);
+    lvl.forEach((arrY, y) => {
+      arrY.forEach((elX, x) => {
+        if (elX === 1) {
+          if (key === 'r' &&
+            y * sz === p.y &&
+            x * sz - sz === p.x) {
+            stopMovement(run);
+          }
+          if (key === 'l' &&
+            y * sz === p.y &&
+            p.x - sz === x * sz) {
+            stopMovement(run)
+          }
+          if (key === 'd' &&
+            x * sz === p.x &&
+            y * sz - sz === p.y) {
+            stopMovement(run);
+          }
+          if (key === 'u' &&
+            x * sz === p.x &&
+            p.y - sz === y * sz) {
+            stopMovement(run)
+          }
+        }
+      });
+    });
+  });
 }
 
-console.log(draw('*'))
-    /*const data = {
-      boxes: [],
-      sides: [],
-      pers: {},
-      dots: [],
-    }
-    let sz = 50;
-    for (let y = 0; y < lvl.length; y++) {
-      for (let x = 0; x < lvl[y].length; x++) {
-        if (lvl[y][x] === 1) {
-          let side = new Block(x * sz, y * sz);
-          data.sides.push(side);
-          ctx.fillStyle = 'darkblue';
-          draw(x * sz, y * sz, sz)
-        }
-        if (lvl[y][x] === 2) {
-          data.pers.x = x * sz;
-          data.pers.y = y * sz;
-          ctx.fillStyle = 'green';
-          draw(x * sz, y * sz, sz);
-        }
-        if (lvl[y][x] === 3) {
-          let box = new Block(x * sz, y * sz);
-          data.boxes.push(box);
-          ctx.fillStyle = 'brown';
-          draw(x * sz, y * sz, sz);
-        }
-        if (lvl[y][x] === 4) {
-          let dot = new Block(x * sz, y * sz);
-          data.dots.push(dot);
-          ctx.fillStyle = 'rgba(0, 150, 150, 0.4)';
-          draw(x * sz, y * sz, sz)
-        }
-      }
-    }
-    const move = [data.pers]
-    let run;
-    btnBlock.addEventListener('touchstart', (e) => {
-      if (e.target.dataset.key) {
-        let route = e.target.dataset.key;
-        run = setInterval(() => movement(move, lvl, route), 200)
-      }
-      e.target.addEventListener('touchend', () => stopMovement(run));
-    })
+function stopMovement(t) {
+  clearInterval(t);
+}
 
-    function movement(mv, lvl, key) {
-      mv.forEach(p => {
-        clear(p.x, p.y, sz);
-        if (key === 'r')  p.x += 50;
-        if (key === 'l')  p.x -= 50;
-        if (key === 'u')  p.y -= 50;
-        if (key === 'd')  p.y += 50;
-        ctx.fillStyle = 'green'
-        draw(p.x, p.y, sz);
-        lvl.forEach((arrY, y) => {
-          arrY.forEach((elX, x) => {
-            if (elX === 1) {
-              if (key === 'r' &&
-                y * sz === p.y &&
-                x * sz - sz === p.x) {
-                stopMovement(run);
-              }
-              if (key === 'l' &&
-                y * sz === p.y &&
-                p.x - sz === x * sz) {
-                stopMovement(run)
-              }
-              if (key === 'd' &&
-                x * sz === p.x &&
-                y * sz - sz === p.y) {
-                stopMovement(run);
-              }
-              if (key === 'u' &&
-                x * sz === p.x &&
-                p.y - sz === y * sz) {
-                stopMovement(run)
-              }
-            }
-          });
-        });
-      });
-    }
+function draw(x, y, sz) {
+  return ctx.fillRect(x, y, sz, sz);
+}
 
-    function stopMovement(t) {
-      clearInterval(t);
-    }
-
-    function draw(x, y, sz) {
-      return ctx.fillRect(x, y, sz, sz);
-    }
-
-    function clear(x, y, sz) {
-      return ctx.clearRect(x, y, sz, sz);
-    }*/
+function clear(x, y, sz) {
+  return ctx.clearRect(x, y, sz, sz);
+}*/
