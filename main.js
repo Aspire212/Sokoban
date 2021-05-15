@@ -8,9 +8,11 @@ cvs.height = document.documentElement.clientHeight
 //Данные о картинках
 const srcImgData = {
     marioR: './img/Player/player_11.png',
-    box: './img/box.png',
+    box: './img/Crates/crate_44.png',
     brick: './img/Blocks/block_04.png',
     stone: './img/Blocks/block_06.png',
+    place: './img/Crates/crate_31.png',
+    succes: './img/Crates/crate_40.png'
 };
 
 //данные о персонаже
@@ -72,10 +74,11 @@ const currentLvl = dataLvl[n].map(str => [...str]);
 //деструктуризирую ключи картинок для доступности
 const {
     marioR,
-    marioL,
+    place,
     box,
     brick,
     stone,
+    succes,
 } = imgSprite;
 
 
@@ -147,7 +150,12 @@ function doMove(dx, dy, lvl) {
         lvl[py + dy][px + dx] = (res0 == '%' ? 'x' : ' ');
         ctx.clearRect((px + dx) * bSz, (py + dy) * bSz, bSz, bSz, bSz);
         lvl[py + 2 * dy][px + 2 * dx] = (res1 == 'x' ? '%' : '*');
-        ctx.drawImage(box, (px + 2 * dx) * bSz, (py + 2 * dy) * bSz, bSz, bSz);
+        let img;
+        //доделать отрисовку
+        res0 == '%' ? img = place : ' '
+        res1 == 'x' ? img = succes : img = box
+        console.log(img)
+        ctx.drawImage(img, (px + 2 * dx) * bSz, (py + 2 * dy) * bSz, bSz, bSz);
         return 2;
     }
     return 1;
@@ -157,15 +165,15 @@ function doMove(dx, dy, lvl) {
 function render(lvl) {
     for (let y = 0; y < lvl.length; y++) {
         for (let x = 0; x < lvl[y].length; x++) {
-            draw(lvl, x, y, bSz);
+            draw(lvl[y][x], x, y, bSz);
         }
     }
 };
 
 
 //отрисовка для рендера
-function draw(arr, x, y, sz) {
-    switch (arr[y][x]) {
+function draw(el, x, y, sz) {
+    switch (el) {
         case "#":
             ctx.drawImage(brick, x * sz, y * sz, sz, sz);
             break;
@@ -177,8 +185,11 @@ function draw(arr, x, y, sz) {
         case '*':
             ctx.drawImage(box, x * sz, y * sz, sz, sz);
             break;
-        case '.':
-            ctx.drawImage(stone, x * sz, y * sz, sz, sz);
+        case '%':
+            ctx.drawImage(succes, x * sz, y * sz, sz, sz);
+            break;
+        case 'x':
+            ctx.drawImage(place, x * sz, y * sz, sz, sz);
             break;
     }
 };
