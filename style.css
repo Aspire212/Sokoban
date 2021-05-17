@@ -24,7 +24,7 @@ body {
     left: 0;
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     background-color: blue;
 }
@@ -50,22 +50,4 @@ body {
     margin: 10px;
     width: 70px;
     height: 20px;
-}
-
-.modal {
-    background-color: blue;
-    position: absolute;
-    top: 100px;
-    right: 10px;
-    width: 100px;
-    height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: top 0.3s ease-in-out;
-    z-index: 100;
-}
-
-.modalA {
-    top: 100px;
 }

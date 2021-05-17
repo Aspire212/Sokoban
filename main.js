@@ -1,4 +1,5 @@
 "use strict";
+const restart = document.getElementById('restart');
 const infoBlock = document.querySelector('.info');
 const infoSteps = infoBlock.querySelector('.steps');
 const cvs = document.getElementById('cvs');
@@ -33,7 +34,7 @@ const srcImgData = {
 //info
 let steps = 0;
 //номер уровня n+1
-let n = 2;
+let n = 0;
 
 // колтчество  ящиков уровне
 const boxLvlInfo = [1, 3, 4, 6]
@@ -132,11 +133,15 @@ let currentLvl = dataLvl[n].map(str => [...str]);
 
 
 window.addEventListener('load', () => {
-    infoSteps.textContent = ` ${steps}`;
     game(currentLvl)
 });
 
+restart.addEventListener('click', clearLvl);
+
+
+
 function game(lvl) {
+    infoSteps.textContent = ` ${steps}`;
     render(lvl);
     window.addEventListener('keydown', logic);
 };
@@ -144,6 +149,7 @@ function game(lvl) {
 
 function logic(e) {
     {
+
         let lvl = currentLvl
             //сохроняю данные кнопки для будущего изменения динамичесеих координат
         const route = e.key;
@@ -152,6 +158,7 @@ function logic(e) {
         let dy = 0;
         //переменная для хранение данных о возможности передвижения
         let move = 0;
+        infoSteps.textContent = ` ${steps}`;
         //роверяю кнопку и меняю координаты
         if (['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
 
@@ -201,12 +208,12 @@ function logic(e) {
             //отрисовываю перса в новом месте
             ctx.drawImage(pers, p.x * sz, p.y * sz, sz, sz);
         }
-        let b = winOrNo(lvl)
+        let nextLvl = winOrNo(lvl)
 
-        if (b) {
-            console.log(222)
+        if (nextLvl) {
             window.removeEventListener('keydown', logic)
-
+            n++;
+            clearLvl();
         }
     }
 }
@@ -269,18 +276,19 @@ function winOrNo(lvl) {
     return 0
 }
 
-
-
-
-
-next.onclick = () => {
+function clearLvl() {
     steps = 0;
     ctx.clearRect(0, 0, cvs.width, cvs.height);
     p.x = 0;
     p.y = 0;
-    n++
     currentLvl = dataLvl[n].map(str => [...str]);
-    game(currentLvl)
+    game(currentLvl);
+}
+
+
+
+next.onclick = () => {
+
 }
 
 function loadImage(coll, data) {
