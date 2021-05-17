@@ -31,7 +31,7 @@ const srcImgData = {
 //info
 let steps = 0;
 //номер уровня n+1
-let n = 0;
+let n = 2;
 
 // колтчество  ящиков уровне
 const boxLvlInfo = [1, 3, 4, 6]
@@ -77,14 +77,14 @@ const dataLvl = [
 
         [
             ".............",
-            "....##########.",
-            "....#        #.",
-            "....#*       #.",
-            "....#@  *## ##.",
-            "....#    #   #.",
-            "....#**  #  x#.",
-            "....#    #xxx#.",
-            "....##########.",
+            "....###########.",
+            "....#         #.",
+            "....# *       #.",
+            "....# @  *## ##.",
+            "....#     #   #.",
+            "....# **  #  x#.",
+            "....#     #xxx#.",
+            "....###########.",
             "...............",
         ],
 
@@ -133,12 +133,14 @@ window.addEventListener('load', () => game(currentLvl));
 
 function game(lvl) {
     render(lvl);
-    window.addEventListener('keydown', (e) => logic(e, lvl));
+    window.addEventListener('keydown', logic);
 };
 
-function logic(e, lvl) {
+
+function logic(e) {
     {
-        //сохроняю данные кнопки для будущего изменения динамичесеих координат
+        let lvl = currentLvl
+            //сохроняю данные кнопки для будущего изменения динамичесеих координат
         const route = e.key;
         //динамические координаты
         let dx = 0;
@@ -198,7 +200,7 @@ function logic(e, lvl) {
 
         if (b) {
             console.log(222)
-            window.removeEventListener('keydown', (e) => logic(e, lvl))
+            window.removeEventListener('keydown', logic)
 
         }
     }
@@ -272,7 +274,8 @@ next.onclick = () => {
     p.x = 0;
     p.y = 0;
     n++
-    game(dataLvl[n].map(str => [...str]))
+    currentLvl = dataLvl[n].map(str => [...str]);
+    game(currentLvl)
 }
 
 function loadImage(coll, data) {
