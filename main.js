@@ -1,19 +1,15 @@
-/*const srcImgData = {
-    marioR: './img/Player/player_11.png',
-    box: './img/Crates/crate_44.png',
-    brick: './img/Blocks/block_04.png',
-    stone: './img/Blocks/block_06.png',
-    place: './img/Crates/crate_31.png',
-    success: './img/Crates/crate_40.png'
-};*/
-
-
 "use strict";
 const cvs = document.getElementById('cvs');
 const ctx = cvs.getContext('2d');
 cvs.width = document.documentElement.clientWidth;
 cvs.height = document.documentElement.clientHeight;
 
+
+
+const sound = {
+    step: new Audio('./sound/step.mp3'),
+    lvlmus: new Audio('./sound/lvlmus.mp3'),
+}
 
 
 
@@ -36,8 +32,11 @@ const srcImgData = {
 let steps = 0;
 //номер уровня n+1
 let n = 0;
-//размер одног блока
-let sz = cvs.width / 25;
+
+// колтчество  ящиков уровне
+const boxLvlInfo = [1, 3, 4, 6]
+    //размер одног блока
+let sz = cvs.width / 26;
 //p - player данные о персе
 const p = {
     name: '',
@@ -50,9 +49,45 @@ const p = {
         down: false,
     }
 };
+
+
+
 const imgSprite = {};
 loadImage(imgSprite, srcImgData);
 const dataLvl = [
+        [
+            ".............",
+            "....########.",
+            "....#     x#.",
+            "....# @  * #.",
+            "....#      #.",
+            "....########.",
+            "............."
+        ],
+
+        [
+            ".............",
+            "....########.",
+            "....#     x#.",
+            "....# * **x#.",
+            "....#x  # @#.",
+            "....########.",
+            "............."
+        ],
+
+        [
+            ".............",
+            "....##########.",
+            "....#        #.",
+            "....#*       #.",
+            "....#@  *## ##.",
+            "....#    #   #.",
+            "....#**  #  x#.",
+            "....#    #xxx#.",
+            "....##########.",
+            "...............",
+        ],
+
         [
             ".....................",
             ".....#####...........",
@@ -68,24 +103,10 @@ const dataLvl = [
             ".....#######.........",
             ".....................",
         ],
-        [
-            ".....................",
-            "#####################",
-            "#                   #",
-            "#                   #",
-            "#                   #",
-            "#                   #",
-            "#        @          #",
-            "#        *          #",
-            "#                   #",
-            "#                x  #",
-            "#                   #",
-            "#                   #",
-            "#####################",
-        ],
+
     ]
     //size = clienwidth/32
-let currentLvl = dataLvl[n].map(str => [...str]);
+
 //деструктуризирую ключи к картинкам для доступности
 const {
     pD1,
@@ -104,7 +125,11 @@ const {
 } = imgSprite;
 //запускаю игру по загрузки ресурсов
 let pers = pR1;
-window.addEventListener('load', () => game(currentLvl));
+
+let currentLvl = dataLvl[n].map(str => [...str]);
+
+
+window.addEventListener('load', () => game(dataLvl[n].map(str => [...str])));
 
 function game(lvl) {
     render(lvl);
@@ -116,8 +141,16 @@ function game(lvl) {
         let dx = 0;
         let dy = 0;
         //переменная для хранение данных о возможности передвижения
-        let move;
+        let move = 0;
         //роверяю кнопку и меняю координаты
+        if (['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+
+            //audio step
+        }
+
+        function playAudio(aud) {
+            return aud.play();
+        }
         if (route === 'ArrowRight') {
             dx = 1
             dy = 0
@@ -138,9 +171,11 @@ function game(lvl) {
             dy = 1;
             steps % 2 ? pers = pD1 : pers = pD2;
         };
+
         //получаю данные о передвижении
         move = canMove(dx, dy, lvl);
-        //если перс сдвинуся перерисоваю его предыдущую позицию
+        console.log(move)
+            //если перс сдвинуся перерисоваю его предыдущую позицию
         if (move) {
             //координата изменялась, добавляю шаг
             steps++;
@@ -161,6 +196,9 @@ function game(lvl) {
             //отрисовываю перса в новом месте
             ctx.drawImage(pers, p.x * sz, p.y * sz, sz, sz)
         }
+        let commpl = winOrNo(lvl)
+        if (commpl) return
+
     });
 };
 // Проверка на возможность сдвинуться
@@ -204,6 +242,35 @@ function render(lvl) {
             draw(lvl[y][x], x, y, sz);
         }
     }
+};
+
+//проверка выйграл ли игрорк
+
+function winOrNo(lvl) {
+    //количество площадок на уровне
+    let xPlace = 0;
+    lvl.forEach(lvlArr => lvlArr.forEach(
+        el => {
+            el === '%' && xPlace++
+        }));
+    if (xPlace === boxLvlInfo[n]) {
+        steps = 0;
+        ctx.clearRect(0, 0, cvs.width, cvs.height);
+        p.x = 0;
+        p.y = 0;
+        xPlace = 0
+        return 1
+    }
+    return 0
+}
+
+
+
+
+
+next.onclick = () => {
+    ctx.clearRect(0, 0, cvs.width, cvs.height);
+    window.addEventListener('load', () => game(dataLvl[n].map(str => [...str])));
 }
 
 function loadImage(coll, data) {
