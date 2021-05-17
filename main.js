@@ -1,40 +1,57 @@
-"use strict";
-const btnBlock = document.querySelector('.btnBlock');
-const cvs = document.getElementById('cvs');
-const ctx = cvs.getContext('2d');
-cvs.width = document.documentElement.clientWidth;
-cvs.height = document.documentElement.clientHeight
-
-//Данные о картинках
-const srcImgData = {
+/*const srcImgData = {
     marioR: './img/Player/player_11.png',
     box: './img/Crates/crate_44.png',
     brick: './img/Blocks/block_04.png',
     stone: './img/Blocks/block_06.png',
     place: './img/Crates/crate_31.png',
-    succes: './img/Crates/crate_40.png'
-};
+    success: './img/Crates/crate_40.png'
+};*/
 
-//данные о персонаже
-const player = {
+
+"use strict";
+const cvs = document.getElementById('cvs');
+const ctx = cvs.getContext('2d');
+cvs.width = document.documentElement.clientWidth;
+cvs.height = document.documentElement.clientHeight;
+
+
+
+
+const srcImgData = {
+    pD1: './img/Player/player_06.png',
+    pD2: './img/Player/player_07.png',
+    pU1: './img/Player/player_03.png',
+    pU2: './img/Player/player_04.png',
+    pR1: './img/Player/player_11.png',
+    pR2: './img/Player/player_12.png',
+    pL1: './img/Player/player_14.png',
+    pL2: './img/Player/player_15.png',
+    box: './img/Crates/crate_04.png',
+    brick: './img/Blocks/block_01.png',
+    //floor: './img/Ground/ground_06.png',
+    place: './img/Environment/environment_09.png',
+    success: './img/Crates/crate_05.png'
+};
+//info
+let steps = 0;
+//номер уровня n+1
+let n = 0;
+//размер одног блока
+let sz = cvs.width / 25;
+//p - player данные о персе
+const p = {
+    name: '',
     x: 0,
     y: 0,
-    view: false, //true лево false право
-}
-
-//размер одного блока
-const bSz = 40;
-
-//картинки
+    view: {
+        right: true,
+        left: false,
+        up: false,
+        down: false,
+    }
+};
 const imgSprite = {};
-
-//уровень
-let n = 0;
-
-//загружаем картинки 
 loadImage(imgSprite, srcImgData);
-
-//карта уровней
 const dataLvl = [
         [
             ".....................",
@@ -45,15 +62,15 @@ const dataLvl = [
             "...#  * * #..........",
             ".### # ## #...######.",
             ".#   # ## #####  xx#.",
-            ".# *  *  @       xx#.",
-            ".##### ### # ##  xx#.",
+            ".# *  *          xx#.",
+            ".##### ### #@##  xx#.",
             ".....#     #########.",
             ".....#######.........",
             ".....................",
         ],
         [
+            ".....................",
             "#####################",
-            "#                   #",
             "#                   #",
             "#                   #",
             "#                   #",
@@ -61,143 +78,134 @@ const dataLvl = [
             "#        @          #",
             "#        *          #",
             "#                   #",
-            "#                   #",
+            "#                x  #",
             "#                   #",
             "#                   #",
             "#####################",
-
         ],
     ]
-    //заменяю смтроки на массивы текущем уровне
-const currentLvl = dataLvl[n].map(str => [...str]);
-
-//деструктуризирую ключи картинок для доступности
+    //size = clienwidth/32
+let currentLvl = dataLvl[n].map(str => [...str]);
+//деструктуризирую ключи к картинкам для доступности
 const {
-    marioR,
-    place,
+    pD1,
+    pD2,
+    pU1,
+    pU2,
+    pR1,
+    pR2,
+    pL1,
+    pL2, //достать всеч персов
     box,
     brick,
-    stone,
-    succes,
+    //floor,
+    place,
+    success,
 } = imgSprite;
-
-
-//запуск игыры по загрузке данных
+//запускаю игру по загрузки ресурсов
+let pers = pR1;
 window.addEventListener('load', () => game(currentLvl));
 
-
-//сама игра
 function game(lvl) {
     render(lvl);
     window.addEventListener('keydown', (e) => {
+
+        //сохроняю данные кнопки для будущего изменения динамичесеих координат
         const route = e.key;
+        //динамические координаты
         let dx = 0;
         let dy = 0;
+        //переменная для хранение данных о возможности передвижения
         let move;
-        let [px, py] = [player.x, player.y];
+        //роверяю кнопку и меняю координаты
         if (route === 'ArrowRight') {
             dx = 1
             dy = 0
+            steps % 2 ? pers = pR1 : pers = pR2;
         };
         if (route === 'ArrowLeft') {
             dx = -1;
             dy = 0
-
+            steps % 2 ? pers = pL1 : pers = pL2;
         };
-
         if (route === 'ArrowUp') {
             dx = 0;
             dy = -1;
+            steps % 2 ? pers = pU1 : pers = pU2;
         };
-
         if (route === 'ArrowDown') {
             dx = 0;
             dy = 1;
+            steps % 2 ? pers = pD1 : pers = pD2;
         };
-        move = doMove(dx, dy, currentLvl);
+        //получаю данные о передвижении
+        move = canMove(dx, dy, lvl);
+        //если перс сдвинуся перерисоваю его предыдущую позицию
         if (move) {
-            //стираю персонаж
-            ctx.clearRect(player.x * bSz, player.y * bSz, bSz, bSz);
-            //меняю его координаты
-            player.x += dx;
-            player.y += dy;
-            //отрисовываю персонажа
-            ctx.drawImage(player.view ? marioL : marioR, player.x * bSz, player.y * bSz, bSz, bSz)
-        };
+            //координата изменялась, добавляю шаг
+            steps++;
+            //заново отрисовываю пол за персом
+            if (lvl[p.y][p.x] === ' ' || lvl[p.y][p.x] === '@') {
+                ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
+                // ctx.drawImage(floor, p.x * sz, p.y * sz, sz, sz);
+            }
+            if (lvl[p.y][p.x] === 'x') {
+                ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
+                ctx.drawImage(place, p.x * sz, p.y * sz, sz, sz);
+            }
+            //меняю координаты перса
+            p.x += dx;
+            p.y += dy;
+            //заново отрисовываю элемент под персом
+            draw(lvl[p.y][p.x], p.x, p.y, sz);
+            //отрисовываю перса в новом месте
+            ctx.drawImage(pers, p.x * sz, p.y * sz, sz, sz)
+        }
     });
 };
-
-//логика игры
-
-//переделать
 // Проверка на возможность сдвинуться
-function doMove(dx, dy, lvl) {
-    // Текущее положение игрока
-    let [px, py] = [player.x, player.y];
-    // Проверить что впереди
-    let res0 = lvl[player.y + dy][px + dx];
-    // Если впереди стена, то  стоп
-    if (res0 === '#') return 0;
+function canMove(dx, dy, lvl) {
+    // Проверяю что впереди
+    let res = lvl[p.y + dy][p.x + dx];
+    // Если впереди стена, то не двигаюсь
+    if (res === '#') return 0;
     // Есть ящик, проверить возможности сдвинуть его
-    if (res0 === '*' || res0 === '%') {
-        let res1 = lvl[py + 2 * dy][px + 2 * dx];
-
+    if (res === '*' || res === '%') {
+        let res1 = lvl[p.y + 2 * dy][p.x + 2 * dx];
         // Впереди ящика стена или другой ящик, нельзя двинуться
-        if (['#', '%', '*'].includes(res1)) {
-            return 0;
-        }
-        let img;
-        // Иначе сдвинуть ящик
-        //ctx.clearRect(px * bSz, py * bSz, bSz, bSz);
-        lvl[py + dy][px + dx] = (res0 == '%' ? 'x' : ' ');
-        res0 == '%' ? img = place : ' '
-        ctx.clearRect((px + dx) * bSz, (py + dy) * bSz, bSz, bSz, bSz);
-        lvl[py + 2 * dy][px + 2 * dx] = (res1 == 'x' ? '%' : '*');
-        //доделать отрисовку
-        res1 == 'x' ? img = succes : img = box
-        console.log(img)
-        ctx.drawImage(img, (px + 2 * dx) * bSz, (py + 2 * dy) * bSz, bSz, bSz);
+        if (['#', '%', '*'].includes(res1)) return 0;
+        // Иначе сдвигаю ящик
+        lvl[p.y + dy][p.x + dx] = (res == '%' ? 'x' : ' ');
+        //занимаюсь перерисовками
+        ctx.clearRect((p.x + dx) * sz, (p.y + dy) * sz, sz, sz);
+        //если ящик на конечной позиции то, меняю его на  succes
+        lvl[p.y + 2 * dy][p.x + 2 * dx] = (res1 == 'x' ? '%' : '*');
+        let sym;
+        //ящик вышел наконечную позицию?
+        res === '%' ? sym = 'x' : sym = ' ';
+        //ящик попал на конечную позицию?
+        res1 === 'x' ? sym = '%' : sym = '*';
+        //отрисовываю результат
+        draw(sym, (p.x + 2 * dx), (p.y + 2 * dy), sz);
         return 2;
     }
     return 1;
-};
-
-//рендер функция
+}
+//по вызову перебираю lvl и отрисовываю его в канвас
 function render(lvl) {
     for (let y = 0; y < lvl.length; y++) {
         for (let x = 0; x < lvl[y].length; x++) {
-            draw(lvl[y][x], x, y, bSz);
+            //отрисовываю пол под персом и получаю его координаты
+            if (lvl[y][x] === '@') {
+                //ctx.drawImage(floor, x * sz, y * sz, sz, sz);
+                p.x = x;
+                p.y = y;
+            }
+            draw(lvl[y][x], x, y, sz);
         }
     }
-};
+}
 
-
-//отрисовка для рендера
-function draw(el, x, y, sz) {
-    switch (el) {
-        case "#":
-            ctx.drawImage(brick, x * sz, y * sz, sz, sz);
-            break;
-        case '@':
-            ctx.drawImage(player.view ? marioL : marioR, x * sz, y * sz, sz, sz);
-            player.x = x;
-            player.y = y;
-            break;
-        case '*':
-            ctx.drawImage(box, x * sz, y * sz, sz, sz);
-            break;
-        case '%':
-            ctx.drawImage(succes, x * sz, y * sz, sz, sz);
-            break;
-        case 'x':
-            ctx.drawImage(place, x * sz, y * sz, sz, sz);
-            break;
-    }
-};
-
-
-
-///загрузка картинок ========= переделаьть
 function loadImage(coll, data) {
     for (let name in data) {
         let img = new Image();
@@ -206,10 +214,10 @@ function loadImage(coll, data) {
     }
 };
 
-//будущая загрузка всех ресурсов
 function loadedResourse() {
     /*возврщаем замкнутую переменную переменную  со значением true после загрузки всех ресурсов*/
 }
+let obj;
 
 function loadedLvl(v) {
     fetch('./maps.json')
@@ -217,45 +225,32 @@ function loadedLvl(v) {
         .then(data => data);
 }
 
-//функция собирающая и выводящая информационные данные
-function gameInfo() {};
-
-
-//рестарт
-function restart() {};
-
-//загрузка карт из json
-/*
-
-    function startGame(){
-
-        $.getJSON("maps.json", function(data) {
-            mapsObject = data;
-            console.log(data);
-            myGameCanvas = new Game(mapsObject);
-            myGameCanvas.start(0);
-        });
-    }
-*/
-/*function paintElem(x, y, lvl) {
-    let temp = lvl[y][x];
-    switch (temp) {
-        case '#':
-            t = 'brick';
-            break;
-        case '.':
-            t = 'stone';
-            break; // Кирпичи
+function gameInfo() {}
+//функция отрисовки одного элемента
+function draw(sym, x, y, sz) {
+    let img;
+    switch (sym) {
         case '*':
-            t = 'box';
-            break; // Ящик
+            img = box;
+            break;
+        case '#':
+            img = brick;
+            break;
+        case ' ':
+            return
+            img = floor;
+            break;
         case '%':
-            t = 'box';
-            break; // Ящик на полу
+            img = success;
+            break;
         case 'x':
-            t = 'place';
+            img = place;
+            break;
+        case '@':
+            img = pers;
             break;
         default:
-            t = '';
+            return;
     }
-}*/
+    return ctx.drawImage(img, x * sz, y * sz, sz, sz);
+}
