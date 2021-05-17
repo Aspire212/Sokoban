@@ -129,12 +129,15 @@ let pers = pR1;
 let currentLvl = dataLvl[n].map(str => [...str]);
 
 
-window.addEventListener('load', () => game(dataLvl[n].map(str => [...str])));
+window.addEventListener('load', () => game(currentLvl));
 
 function game(lvl) {
     render(lvl);
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', (e) => logic(e, lvl));
+};
 
+function logic(e, lvl) {
+    {
         //сохроняю данные кнопки для будущего изменения динамичесеих координат
         const route = e.key;
         //динамические координаты
@@ -146,10 +149,6 @@ function game(lvl) {
         if (['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
 
             //audio step
-        }
-
-        function playAudio(aud) {
-            return aud.play();
         }
         if (route === 'ArrowRight') {
             dx = 1
@@ -171,11 +170,10 @@ function game(lvl) {
             dy = 1;
             steps % 2 ? pers = pD1 : pers = pD2;
         };
-
-        //получаю данные о передвижении
+        console.log(lvl)
+            //получаю данные о передвижении
         move = canMove(dx, dy, lvl);
-        console.log(move)
-            //если перс сдвинуся перерисоваю его предыдущую позицию
+        //если перс сдвинуся перерисоваю его предыдущую позицию
         if (move) {
             //координата изменялась, добавляю шаг
             steps++;
@@ -194,13 +192,18 @@ function game(lvl) {
             //заново отрисовываю элемент под персом
             draw(lvl[p.y][p.x], p.x, p.y, sz);
             //отрисовываю перса в новом месте
-            ctx.drawImage(pers, p.x * sz, p.y * sz, sz, sz)
+            ctx.drawImage(pers, p.x * sz, p.y * sz, sz, sz);
         }
-        let commpl = winOrNo(lvl)
-        if (commpl) return
+        let b = winOrNo(lvl)
 
-    });
-};
+        if (b) {
+            console.log(222)
+            window.removeEventListener('keydown', (e) => logic(e, lvl))
+
+        }
+    }
+}
+
 // Проверка на возможность сдвинуться
 function canMove(dx, dy, lvl) {
     // Проверяю что впереди
@@ -254,11 +257,6 @@ function winOrNo(lvl) {
             el === '%' && xPlace++
         }));
     if (xPlace === boxLvlInfo[n]) {
-        steps = 0;
-        ctx.clearRect(0, 0, cvs.width, cvs.height);
-        p.x = 0;
-        p.y = 0;
-        xPlace = 0
         return 1
     }
     return 0
@@ -269,8 +267,12 @@ function winOrNo(lvl) {
 
 
 next.onclick = () => {
+    steps = 0;
     ctx.clearRect(0, 0, cvs.width, cvs.height);
-    window.addEventListener('load', () => game(dataLvl[n].map(str => [...str])));
+    p.x = 0;
+    p.y = 0;
+    n++
+    game(dataLvl[n].map(str => [...str]))
 }
 
 function loadImage(coll, data) {
