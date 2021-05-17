@@ -18,6 +18,21 @@ body {
     justify-content: center;
 }
 
+.info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: blue;
+}
+
+.steps {
+    color: #000;
+}
+
 #cvs {
     background: rgb(52, 104, 104);
 }

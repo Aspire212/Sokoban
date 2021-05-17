@@ -1,4 +1,6 @@
 "use strict";
+const infoBlock = document.querySelector('.info');
+const infoSteps = infoBlock.querySelector('.steps');
 const cvs = document.getElementById('cvs');
 const ctx = cvs.getContext('2d');
 cvs.width = document.documentElement.clientWidth;
@@ -37,6 +39,7 @@ let n = 2;
 const boxLvlInfo = [1, 3, 4, 6]
     //размер одног блока
 let sz = cvs.width / 26;
+infoBlock.style.height = sz + 'px';
 //p - player данные о персе
 const p = {
     name: '',
@@ -49,7 +52,6 @@ const p = {
         down: false,
     }
 };
-
 
 
 const imgSprite = {};
@@ -129,7 +131,10 @@ let pers = pR1;
 let currentLvl = dataLvl[n].map(str => [...str]);
 
 
-window.addEventListener('load', () => game(currentLvl));
+window.addEventListener('load', () => {
+    infoSteps.textContent = ` ${steps}`;
+    game(currentLvl)
+});
 
 function game(lvl) {
     render(lvl);
@@ -172,13 +177,13 @@ function logic(e) {
             dy = 1;
             steps % 2 ? pers = pD1 : pers = pD2;
         };
-        console.log(lvl)
-            //получаю данные о передвижении
+        //получаю данные о передвижении
         move = canMove(dx, dy, lvl);
         //если перс сдвинуся перерисоваю его предыдущую позицию
         if (move) {
             //координата изменялась, добавляю шаг
             steps++;
+            infoSteps.textContent = ` ${steps}`;
             //заново отрисовываю пол за персом
             if (lvl[p.y][p.x] === ' ' || lvl[p.y][p.x] === '@') {
                 ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
