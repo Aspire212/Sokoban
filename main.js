@@ -10,12 +10,10 @@ cvs.height = document.documentElement.clientHeight;
 
 
 const sound = {
-    step: new Audio('./sound/step.mp3'),
-    lvlmus: new Audio('./sound/lvlmus.mp3'),
-}
-
-
-
+        step: new Audio('./sound/step.mp3'),
+        lvlmus: new Audio('./sound/lvlmus.mp3'),
+    }
+    ///src картинок
 const srcImgData = {
     pD1: './img/Player/player_06.png',
     pD2: './img/Player/player_07.png',
@@ -119,26 +117,25 @@ const {
     pR1,
     pR2,
     pL1,
-    pL2, //достать всеч персов
-    box,
+    pL2,
     brick,
+    box,
     //floor,
     place,
     success,
 } = imgSprite;
 //запускаю игру по загрузки ресурсов
 let pers = pR1;
-
+//делаю многомерный массив
 let currentLvl = dataLvl[n].map(str => [...str]);
 
-
+//первый запуск
 window.addEventListener('load', () => {
     game(currentLvl)
 });
 
+//restart
 restart.addEventListener('click', clearLvl);
-
-
 
 function game(lvl) {
     infoSteps.textContent = ` ${steps}`;
@@ -146,76 +143,77 @@ function game(lvl) {
     window.addEventListener('keydown', logic);
 };
 
-
+//основная логика игры
 function logic(e) {
-    {
+    let lvl = currentLvl
+        //сохроняю данные кнопки для будущего изменения динамичесеих координат
+    const route = e.key;
+    //динамические координаты
+    let dx = 0;
+    let dy = 0;
+    //переменная для хранение данных о возможности передвижения
+    let move = 0;
+    //переменная для храненияя
+    let nextLvl = false;
+    infoSteps.textContent = ` ${steps}`;
+    //роверяю кнопку и меняю координаты
+    if (['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
 
-        let lvl = currentLvl
-            //сохроняю данные кнопки для будущего изменения динамичесеих координат
-        const route = e.key;
-        //динамические координаты
-        let dx = 0;
-        let dy = 0;
-        //переменная для хранение данных о возможности передвижения
-        let move = 0;
+        //audio step
+    };
+
+    if (route === 'ArrowRight') {
+        dx = 1
+        dy = 0
+        steps % 2 ? pers = pR1 : pers = pR2;
+    };
+    if (route === 'ArrowLeft') {
+        dx = -1;
+        dy = 0
+        steps % 2 ? pers = pL1 : pers = pL2;
+    };
+    if (route === 'ArrowUp') {
+        dx = 0;
+        dy = -1;
+        steps % 2 ? pers = pU1 : pers = pU2;
+    };
+    if (route === 'ArrowDown') {
+        dx = 0;
+        dy = 1;
+        steps % 2 ? pers = pD1 : pers = pD2;
+    };
+    //получаю данные о передвижении
+    move = canMove(dx, dy, lvl);
+    //если перс сдвинуся перерисоваю его предыдущую позицию
+    if (move) {
+        //координата изменялась, добавляю шаг
+        steps++;
         infoSteps.textContent = ` ${steps}`;
-        //роверяю кнопку и меняю координаты
-        if (['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
-
-            //audio step
+        //заново отрисовываю пол за персом
+        if (lvl[p.y][p.x] === ' ' || lvl[p.y][p.x] === '@') {
+            ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
+            // ctx.drawImage(floor, p.x * sz, p.y * sz, sz, sz);
         }
-        if (route === 'ArrowRight') {
-            dx = 1
-            dy = 0
-            steps % 2 ? pers = pR1 : pers = pR2;
-        };
-        if (route === 'ArrowLeft') {
-            dx = -1;
-            dy = 0
-            steps % 2 ? pers = pL1 : pers = pL2;
-        };
-        if (route === 'ArrowUp') {
-            dx = 0;
-            dy = -1;
-            steps % 2 ? pers = pU1 : pers = pU2;
-        };
-        if (route === 'ArrowDown') {
-            dx = 0;
-            dy = 1;
-            steps % 2 ? pers = pD1 : pers = pD2;
-        };
-        //получаю данные о передвижении
-        move = canMove(dx, dy, lvl);
-        //если перс сдвинуся перерисоваю его предыдущую позицию
-        if (move) {
-            //координата изменялась, добавляю шаг
-            steps++;
-            infoSteps.textContent = ` ${steps}`;
-            //заново отрисовываю пол за персом
-            if (lvl[p.y][p.x] === ' ' || lvl[p.y][p.x] === '@') {
-                ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
-                // ctx.drawImage(floor, p.x * sz, p.y * sz, sz, sz);
-            }
-            if (lvl[p.y][p.x] === 'x') {
-                ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
-                ctx.drawImage(place, p.x * sz, p.y * sz, sz, sz);
-            }
-            //меняю координаты перса
-            p.x += dx;
-            p.y += dy;
-            //заново отрисовываю элемент под персом
-            draw(lvl[p.y][p.x], p.x, p.y, sz);
-            //отрисовываю перса в новом месте
-            ctx.drawImage(pers, p.x * sz, p.y * sz, sz, sz);
+        if (lvl[p.y][p.x] === 'x') {
+            ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
+            ctx.drawImage(place, p.x * sz, p.y * sz, sz, sz);
         }
-        let nextLvl = winOrNo(lvl)
-
-        if (nextLvl) {
-            window.removeEventListener('keydown', logic)
-            n++;
-            clearLvl();
-        }
+        //меняю координаты перса
+        p.x += dx;
+        p.y += dy;
+        //заново отрисовываю элемент под персом
+        draw(lvl[p.y][p.x], p.x, p.y, sz);
+        //отрисовываю перса в новом месте
+        ctx.drawImage(pers, p.x * sz, p.y * sz, sz, sz);
     }
+
+    nextLvl = winOrNo(lvl)
+
+    if (nextLvl) {
+        n++;
+        clearLvl();
+    }
+
 }
 
 // Проверка на возможность сдвинуться
@@ -261,56 +259,6 @@ function render(lvl) {
     }
 };
 
-//проверка выйграл ли игрорк
-
-function winOrNo(lvl) {
-    //количество площадок на уровне
-    let xPlace = 0;
-    lvl.forEach(lvlArr => lvlArr.forEach(
-        el => {
-            el === '%' && xPlace++
-        }));
-    if (xPlace === boxLvlInfo[n]) {
-        return 1
-    }
-    return 0
-}
-
-function clearLvl() {
-    steps = 0;
-    ctx.clearRect(0, 0, cvs.width, cvs.height);
-    p.x = 0;
-    p.y = 0;
-    currentLvl = dataLvl[n].map(str => [...str]);
-    game(currentLvl);
-}
-
-
-
-next.onclick = () => {
-
-}
-
-function loadImage(coll, data) {
-    for (let name in data) {
-        let img = new Image();
-        img.src = data[name];
-        coll[name] = img;
-    }
-};
-
-function loadedResourse() {
-    /*возврщаем замкнутую переменную переменную  со значением true после загрузки всех ресурсов*/
-}
-let obj;
-
-function loadedLvl(v) {
-    fetch('./maps.json')
-        .then(response => response.json())
-        .then(data => data);
-}
-
-function gameInfo() {}
 //функция отрисовки одного элемента
 function draw(sym, x, y, sz) {
     let img;
@@ -339,3 +287,49 @@ function draw(sym, x, y, sz) {
     }
     return ctx.drawImage(img, x * sz, y * sz, sz, sz);
 }
+
+
+//проверка выйграл ли игроркs
+function winOrNo() {
+    //количество площадок на уровне
+    let xPlace = 0;
+    currentLvl.forEach(lvlArr => lvlArr.forEach(
+        el => {
+            el === '%' && xPlace++
+        }));
+    if (xPlace === boxLvlInfo[n]) {
+        return true;
+    }
+    return false;
+}
+
+function clearLvl() {
+    window.removeEventListener('keydown', logic);
+    steps = 0;
+    ctx.clearRect(0, 0, cvs.width, cvs.height);
+    p.x = 0;
+    p.y = 0;
+    currentLvl = dataLvl[n].map(str => [...str]);
+    game(currentLvl);
+}
+
+
+function loadImage(coll, data) {
+    for (let name in data) {
+        let img = new Image();
+        img.src = data[name];
+        coll[name] = img;
+    }
+};
+
+function loadedResourse() {
+    /*возврщаем замкнутую переменную переменную  со значением true после загрузки всех ресурсов*/
+}
+
+function loadedLvl(v) {
+    fetch('./maps.json')
+        .then(response => response.json())
+        .then(data => data);
+}
+
+function gameInfo() {}
