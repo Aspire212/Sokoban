@@ -10,19 +10,19 @@ cvs.height = document.documentElement.clientHeight;
 
 
 const sound = {
-        step: new Audio('./sound/step.mp3'),
-        lvlmus: new Audio('./sound/lvlmus.mp3'),
-    }
-    ///src картинок
+    step: new Audio('./sound/step.mp3'),
+    lvlmus: new Audio('./sound/lvlmus.mp3'),
+};
+///src картинок
 const srcImgData = {
     pD1: './img/Player/player_06.png',
     pD2: './img/Player/player_07.png',
-    pU1: './img/Player/player_03.png',
-    pU2: './img/Player/player_04.png',
-    pR1: './img/Player/player_11.png',
-    pR2: './img/Player/player_12.png',
-    pL1: './img/Player/player_14.png',
-    pL2: './img/Player/player_15.png',
+    pU1: './img/Player/player_09.png',
+    pU2: './img/Player/player_10.png',
+    pR1: './img/Player/player_17.png',
+    pR2: './img/Player/player_18.png',
+    pL1: './img/Player/player_20.png',
+    pL2: './img/Player/player_21.png',
     box: './img/Crates/crate_04.png',
     brick: './img/Blocks/block_01.png',
     //floor: './img/Ground/ground_06.png',
@@ -35,8 +35,8 @@ let steps = 0;
 let n = 0;
 
 // колтчество  ящиков уровне
-const boxLvlInfo = [1, 3, 4, 6]
-    //размер одног блока
+const boxLvlInfo = [1, 3, 4, 6];
+//размер одног блока
 let sz = cvs.width / 26;
 infoBlock.style.height = sz + 'px';
 //p - player данные о персе
@@ -49,64 +49,64 @@ const p = {
         left: false,
         up: false,
         down: false,
-    }
+    },
 };
 
 
 const imgSprite = {};
 loadImage(imgSprite, srcImgData);
 const dataLvl = [
-        [
-            ".............",
-            "....########.",
-            "....#     x#.",
-            "....# @  * #.",
-            "....#      #.",
-            "....########.",
-            "............."
-        ],
+    [
+        ".............",
+        "....########.",
+        "....#     x#.",
+        "....# @  * #.",
+        "....#      #.",
+        "....########.",
+        "............."
+    ],
 
-        [
-            ".............",
-            "....########.",
-            "....#     x#.",
-            "....# * **x#.",
-            "....#x  # @#.",
-            "....########.",
-            "............."
-        ],
+    [
+        ".............",
+        "....########.",
+        "....#     x#.",
+        "....# * **x#.",
+        "....#x  # @#.",
+        "....########.",
+        "............."
+    ],
 
-        [
-            ".............",
-            "....###########.",
-            "....#         #.",
-            "....# *       #.",
-            "....# @  *## ##.",
-            "....#     #   #.",
-            "....# **  #  x#.",
-            "....#     #xxx#.",
-            "....###########.",
-            "...............",
-        ],
+    [
+        ".............",
+        "....###########.",
+        "....#         #.",
+        "....# *       #.",
+        "....# @  *## ##.",
+        "....#     #   #.",
+        "....# **  #  x#.",
+        "....#     #xxx#.",
+        "....###########.",
+        "...............",
+    ],
 
-        [
-            ".....................",
-            ".....#####...........",
-            ".....#   #...........",
-            ".....#*  #...........",
-            "...###  *##..........",
-            "...#  * * #..........",
-            ".### # ## #...######.",
-            ".#   # ## #####  xx#.",
-            ".# *  *          xx#.",
-            ".##### ### #@##  xx#.",
-            ".....#     #########.",
-            ".....#######.........",
-            ".....................",
-        ],
+    [
+        ".....................",
+        ".....#####...........",
+        ".....#   #...........",
+        ".....#*  #...........",
+        "...###  *##..........",
+        "...#  * * #..........",
+        ".### # ## #...######.",
+        ".#   # ## #####  xx#.",
+        ".# *  *          xx#.",
+        ".##### ### #@##  xx#.",
+        ".....#     #########.",
+        ".....#######.........",
+        ".....................",
+    ],
 
-    ]
-    //size = clienwidth/32
+];
+//size = clienwidth/32
 
 //деструктуризирую ключи к картинкам для доступности
 const {
@@ -131,7 +131,7 @@ let currentLvl = dataLvl[n].map(str => [...str]);
 
 //первый запуск
 window.addEventListener('load', () => {
-    game(currentLvl)
+    game(currentLvl);
 });
 
 //restart
@@ -145,8 +145,8 @@ function game(lvl) {
 
 //основная логика игры
 function logic(e) {
-    let lvl = currentLvl
-        //сохроняю данные кнопки для будущего изменения динамичесеих координат
+    let lvl = currentLvl;
+    //сохроняю данные кнопки для будущего изменения динамичесеих координат
     const route = e.key;
     //динамические координаты
     let dx = 0;
@@ -155,8 +155,8 @@ function logic(e) {
     let move = 0;
     //переменная для храненияя
     let nextLvl = false;
-    infoSteps.textContent = ` ${steps}`;
-    //роверяю кнопку и меняю координаты
+
+    //проверяю кнопку и меняю координаты
     if (['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
 
         //audio step
@@ -187,17 +187,21 @@ function logic(e) {
     //если перс сдвинуся перерисоваю его предыдущую позицию
     if (move) {
         //координата изменялась, добавляю шаг
-        steps++;
+        if (['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+            steps++;
+            //audio step
+        };
+
         infoSteps.textContent = ` ${steps}`;
         //заново отрисовываю пол за персом
         if (lvl[p.y][p.x] === ' ' || lvl[p.y][p.x] === '@') {
             ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
             // ctx.drawImage(floor, p.x * sz, p.y * sz, sz, sz);
-        }
+        };
         if (lvl[p.y][p.x] === 'x') {
             ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
             ctx.drawImage(place, p.x * sz, p.y * sz, sz, sz);
-        }
+        };
         //меняю координаты перса
         p.x += dx;
         p.y += dy;
@@ -205,16 +209,16 @@ function logic(e) {
         draw(lvl[p.y][p.x], p.x, p.y, sz);
         //отрисовываю перса в новом месте
         ctx.drawImage(pers, p.x * sz, p.y * sz, sz, sz);
-    }
+    };
 
-    nextLvl = winOrNo(lvl)
+    nextLvl = winOrNo(lvl);
 
     if (nextLvl) {
         n++;
         clearLvl();
-    }
+    };
 
-}
+};
 
 // Проверка на возможность сдвинуться
 function canMove(dx, dy, lvl) {
@@ -253,10 +257,10 @@ function render(lvl) {
                 //ctx.drawImage(floor, x * sz, y * sz, sz, sz);
                 p.x = x;
                 p.y = y;
-            }
+            };
             draw(lvl[y][x], x, y, sz);
-        }
-    }
+        };
+    };
 };
 
 //функция отрисовки одного элемента
