@@ -136,6 +136,15 @@ let pers = pR1;
 //делаю многомерный массив
 let currentLvl = dataLvl[n].map(str => [...str]);
 
+//ресайз
+window.addEventListener('resize', () => {
+   ctx.clearRect(0, 0, ctx.width, ctx.height);
+  cvs.width = document.documentElement.clientWidth;
+  cvs.height = document.documentElement.clientHeight;
+  game(currentLvl);
+});
+
+
 //первый запуск
 window.addEventListener('load', () => {
     start(n, currentLvl)
