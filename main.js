@@ -34,7 +34,7 @@ const srcImgData = {
 //info
 let steps = 0;
 //номер уровня n+1
-let n = 2;
+let n = 0;
 
 // колтчество  ящиков уровне
 const boxLvlInfo = [1, 3, 4, 6];
