@@ -138,12 +138,15 @@ let currentLvl = dataLvl[n].map(str => [...str]);
 
 //ресайз
 window.addEventListener('resize', () => {
-   ctx.clearRect(0, 0, ctx.width, ctx.height);
+  ctx.clearRect(0, 0, ctx.width, ctx.height);
   cvs.width = document.documentElement.clientWidth;
   cvs.height = document.documentElement.clientHeight;
+  sz = cvs.width / 26;
   game(currentLvl);
-});
+  console.log(cvs.width)
+  console.log(sz)
 
+});
 
 //первый запуск
 window.addEventListener('load', () => {
