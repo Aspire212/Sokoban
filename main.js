@@ -9,6 +9,9 @@ cvs.height = document.documentElement.clientHeight;
 
 
 
+const stepSound = new Audio('./sound/step.mp3')
+
+
 
 
 const sound = {
@@ -138,6 +141,7 @@ window.addEventListener('resize', resizeScreen);
 //первый запуск
 window.addEventListener('load', () => {
     start(n, currentLvl)
+
 });
 
 //restart
@@ -165,7 +169,10 @@ function logic(e) {
     //проверяю кнопку и меняю координаты
     if (['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
 
-        //audio step
+        stepSound.load();
+        stepSound.volume = 0.05
+        stepSound.addEventListener('canplaythrough', () => stepSound.play())
+            //audio step
     };
 
     if (route === 'ArrowRight') {
@@ -259,11 +266,11 @@ function canMove(dx, dy, lvl) {
 function render(lvl) {
     for (let y = 0; y < lvl.length; y++) {
         for (let x = 0; x < lvl[y].length; x++) {
-             ///отрисовываю под полем сервй цвет
-             if(lvl[y][x] !== '.'){
-               ctx.fillStyle = 'gray';
-               ctx.fillRect(x * sz, y * sz, sz, sz);
-             }
+            ///отрисовываю под полем сервй цвет
+            if (lvl[y][x] !== '.') {
+                ctx.fillStyle = 'gray';
+                ctx.fillRect(x * sz, y * sz, sz, sz);
+            }
             //отрисовываю пол под персом и получаю его координаты
             if (lvl[y][x] === '@') {
                 ctx.drawImage(floor, x * sz, y * sz, sz, sz);
@@ -296,13 +303,13 @@ function cvsMess(mess) {
     ctx.fillText(mess, cvs.width / 2, cvs.height / 2 - 30);
 }
 
-function resizeScreen(){
-  ctx.clearRect(0, 0, ctx.width, ctx.height);
-  cvs.width = document.documentElement.clientWidth;
-  cvs.height = document.documentElement.clientHeight;
-  sz = cvs.width / 28;
-  infoBlock.style.height = sz + 'px';
-  game(currentLvl);
+function resizeScreen() {
+    ctx.clearRect(0, 0, ctx.width, ctx.height);
+    cvs.width = document.documentElement.clientWidth;
+    cvs.height = document.documentElement.clientHeight;
+    sz = cvs.width / 28;
+    infoBlock.style.height = sz + 'px';
+    game(currentLvl);
 };
 
 //функция отрисовки одного элемента
