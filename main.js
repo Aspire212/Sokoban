@@ -110,8 +110,6 @@ const dataLvl = [
 
 
 ];
-console.log(dataLvl[3][0].length)
-//size = clienwidth/32
 
 //деструктуризирую ключи к картинкам для доступности
 const {
@@ -135,17 +133,7 @@ let pers = pR1;
 let currentLvl = dataLvl[n].map(str => [...str]);
 
 //ресайз
-window.addEventListener('resize', () => {
-  ctx.clearRect(0, 0, ctx.width, ctx.height);
-  cvs.width = document.documentElement.clientWidth;
-  cvs.height = document.documentElement.clientHeight;
-  sz = cvs.width / 28;
-  infoBlock.style.height = sz + 'px';
-  game(currentLvl);
-  console.log(cvs.width)
-  console.log(sz)
-
-});
+window.addEventListener('resize', resizeScreen);
 
 //первый запуск
 window.addEventListener('load', () => {
@@ -307,6 +295,16 @@ function cvsMess(mess) {
     ctx.textAlign = 'center';
     ctx.fillText(mess, cvs.width / 2, cvs.height / 2 - 30);
 }
+
+function resizeScreen(){
+  ctx.clearRect(0, 0, ctx.width, ctx.height);
+  cvs.width = document.documentElement.clientWidth;
+  cvs.height = document.documentElement.clientHeight;
+  sz = cvs.width / 28;
+  infoBlock.style.height = sz + 'px';
+  game(currentLvl);
+};
+
 //функция отрисовки одного элемента
 function draw(sym, x, y, sz) {
     let img;
