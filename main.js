@@ -27,7 +27,7 @@ const srcImgData = {
     pL2: './img/Player/player_21.png',
     box: './img/Crates/crate_04.png',
     brick: './img/Blocks/block_01.png',
-    //floor: './img/Ground/ground_06.png',
+    floor: './img/Ground/ground_06.png',
     place: './img/Environment/environment_09.png',
     success: './img/Crates/crate_05.png'
 };
@@ -127,7 +127,7 @@ const {
     pL2,
     brick,
     box,
-    //floor,
+    floor,
     place,
     success,
 } = imgSprite;
@@ -203,7 +203,7 @@ function logic(e) {
         //заново отрисовываю пол за персом
         if (lvl[p.y][p.x] === ' ' || lvl[p.y][p.x] === '@') {
             ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
-            // ctx.drawImage(floor, p.x * sz, p.y * sz, sz, sz);
+            ctx.drawImage(floor, p.x * sz, p.y * sz, sz, sz);
         };
         if (lvl[p.y][p.x] === 'x') {
             ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
@@ -260,9 +260,14 @@ function canMove(dx, dy, lvl) {
 function render(lvl) {
     for (let y = 0; y < lvl.length; y++) {
         for (let x = 0; x < lvl[y].length; x++) {
+             ///отрисовываю под полем сервй цвет
+             if(lvl[y][x] !== '.'){
+               ctx.fillStyle = 'gray';
+               ctx.fillRect(x * sz, y * sz, sz, sz);
+             }
             //отрисовываю пол под персом и получаю его координаты
             if (lvl[y][x] === '@') {
-                //ctx.drawImage(floor, x * sz, y * sz, sz, sz);
+                ctx.drawImage(floor, x * sz, y * sz, sz, sz);
                 p.x = x;
                 p.y = y;
             };
@@ -302,7 +307,6 @@ function draw(sym, x, y, sz) {
             img = brick;
             break;
         case ' ':
-            return
             img = floor;
             break;
         case '%':
