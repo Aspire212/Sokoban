@@ -2,20 +2,82 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
 body {
-    background: #000;
+    background: rgb(26, 32, 32);
     overflow: hidden;
+    position: relative;
+    color: aliceblue;
+    width: 100vw;
+    height: 100vh;
+}
+
+.menu {
+    width: 100%;
+    height: 100%;
+}
+
+.main-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+    transition: transform .5s linear;
+}
+
+.logo h1 {
+    font-size: 60px;
     position: relative;
 }
 
-.wrapper {
+.o {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background: aliceblue;
+    position: relative;
+    border-radius: 45%;
+    margin: 0 3px;
+    animation: wiggle 3s infinite ease-in-out;
+}
+
+.o img {
+    width: 90%;
+    height: 90%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+}
+
+.setName {
+    position: relative;
+    bottom: 200px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+}
+
+.setName>div {
+    margin: 10px 0;
+    font-size: 20px;
+}
+
+.wrapper-game {
     width: 100vw;
     height: 100vh;
     display: flex;
     overflow: hidden;
     justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(100%);
+    transition: transform .5s linear;
 }
 
 .info {
@@ -50,4 +112,36 @@ body {
     margin: 10px;
     width: 70px;
     height: 20px;
+}
+
+.records-screen {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgb(26, 32, 32);
+    transform: translateX(100%);
+    transition: transform .5s linear;
+}
+
+@keyframes wiggle {
+    0% {
+        transform: rotateZ(0);
+    }
+    25% {
+        transform: rotateZ(-25deg);
+    }
+    50% {
+        transform: rotateZ(0);
+    }
+    75% {
+        transform: rotateZ(25deg);
+    }
+    100% {
+        transform: rotateZ(0);
+    }
 }

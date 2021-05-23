@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <title>Sokoban</title>
 
     <!-- HTML -->
@@ -16,14 +18,43 @@
 </head>
 
 <body>
-    <div class="wrapper">
-        <div class="info">
-            <div>Количество шагов:<span class="steps"></span></div>
-            <div><button id='restart'>res</button></div>
+    <div class="menu">
+        <div class="main-screen">
+            <div class="logo">
+                <h1>Сок<span class="o"><img src="./img/favicon.png" alt="o"></span>бан</h1>
+            </div>
+            <div class="setName">
+                <div>
+                    <p class="messages"></p>
+                    <input type="text" id="name" placeholder="Введите имя">
+                    <button data-menu='menuControl' id='startGame'>Начать</button>
+                </div>
+                <button class="openSetting">Настройки</button>
+                <button data-menu='menuControl' id="openRecords">Рекорды</button>
+            </div>
         </div>
-        <canvas id="cvs">
-        </canvas>
+
+        <div class="wrapper-game">
+            <div class="info">
+                <div>Количество шагов:<span class="steps"></span></div>
+                <div><button id='restart'>res</button></div>
+            </div>
+            <canvas id="cvs">
+            </canvas>
+        </div>
+        <div class="records-screen">
+            records screen
+            <!--отрисовать рекорды по запросу-->
+        </div>
+        <div class="modalSetting">
+            <!--модалка настроек-->
+        </div>
     </div>
+
+
+
+
+
     <!-- Project -->
     <script src="main.js"></script>
 </body>

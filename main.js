@@ -1,4 +1,46 @@
 "use strict";
+/*menu*/
+const menuControlBtn = document.querySelectorAll('button[data-menu="menuControl"]')
+const gameScreen = document.querySelector('.wrapper-game');
+const recordsScreen = document.querySelector('.records-screen');
+const mainScreen = document.querySelector('.main-screen');
+
+let currentScreen;
+let nextScreen;
+
+menuControlBtn.forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (btn.id === 'startGame') {
+            currentScreen = mainScreen;
+            nextScreen = gameScreen;
+        }
+        if (btn.id === 'openRecords') {
+            currentScreen = mainScreen;
+            nextScreen = recordsScreen;
+        }
+        changeScreen(currentScreen, nextScreen);
+    });
+});
+
+
+function changeScreen(curPg, nextPg) {
+    nextPg.style.cssText = `
+        transform: translateX(0);
+        z-index: 1;
+        `;
+    curPg.style.cssText = `
+        transform: translateX(-100%);
+        z-index: 1;
+        `;
+}
+
+/*menu*/
+
+
+
+
+
+
 const restart = document.getElementById('restart');
 const infoBlock = document.querySelector('.info');
 const infoSteps = infoBlock.querySelector('.steps');
