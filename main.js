@@ -11,6 +11,7 @@ let nextScreen;
 menuControlBtn.forEach(btn => {
     btn.addEventListener('click', () => {
         if (btn.id === 'startGame') {
+            //вставить событие лоад запускающее первый lvl
             currentScreen = mainScreen;
             nextScreen = gameScreen;
         }
