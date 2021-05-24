@@ -30,7 +30,7 @@ menuControlBtn.forEach(btn => {
                     currentScreen = mainScreen;
                     nextScreen = gameScreen;
                     playerData.name = inputName.value;
-                    inputName = '';
+                    inputName.value = '';
                 } else {
                     inputName.placeholder = 'Обязательное поле';
                     return;
@@ -152,6 +152,7 @@ const p = {
     x: 0,
     y: 0,
     life: 3,
+    reset: false, /// флаг для добавления кнопки рестарт в настройки
     view: {
         right: true,
         left: false,
@@ -460,6 +461,9 @@ function winOrNo() {
 
 function restartLvl() {
     p.life -= 1;
+    if (!p.life) {
+        restart.textContent = 'Game Over'
+    }
     if (p.life < 0) {
         ctx.clearRect(0, 0, cvs.width, cvs.height);
         cvsMess('Game Over');
@@ -467,6 +471,7 @@ function restartLvl() {
         p.y = 0;
         p.life = 3;
         n = 0;
+        restart.textContent = 'restart'
         currentLvl = dataLvl[n].map(str => [...str]);
         setTimeout(() => {
             changeScreen(mainScreen, gameScreen, false);
