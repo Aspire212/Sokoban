@@ -24,13 +24,13 @@
                 <h1>Сок<span class="o"><img src="./img/favicon.png" alt="o"></span>бан</h1>
             </div>
             <div class="setName">
-                <div>
-                    <p class="messages"></p>
+                <div class="inputName">
                     <input type="text" id="name" placeholder="Введите имя">
-                    <button data-menu='menuControl' id='startGame'>Начать</button>
+                    <button class='menuControl' data-m='startGame'>Начать</button>
                 </div>
                 <button class="openSetting">Настройки</button>
-                <button data-menu='menuControl' id="openRecords">Рекорды</button>
+                <button class='menuControl' data-m="openRecords">Рекорды</button>
+                <button class='menuControl' data-m="openAbout">Об игре</button>
             </div>
         </div>
 
@@ -44,9 +44,17 @@
         </div>
         <div class="records-screen">
             records screen
+            <button class='menuControl' data-m='back'>back</button>
             <!--отрисовать рекорды по запросу-->
         </div>
+        <div class="aboutScreen">
+            <button class='menuControl' data-m='back'>back</button>
+            <p>Sokoban (Soko-Ban, яп. 倉庫番, сокобан &#45; кладовщик) &#45; двухмерная компьютерная игра-головоломка, в которой игроку необходимо расставить ящики по обозначенным местам лабиринта. Кладовщик одновременно может двигать только один ящик, толкая
+                вперёд.
+            </p>
+        </div>
         <div class="modalSetting">
+            <button id="closeModal">&times;</button> volume
             <!--модалка настроек-->
         </div>
     </div>

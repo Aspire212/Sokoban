@@ -1,39 +1,98 @@
 "use strict";
 /*menu*/
-const menuControlBtn = document.querySelectorAll('button[data-menu="menuControl"]')
+const menuControlBtn = document.querySelectorAll('.menuControl')
 const gameScreen = document.querySelector('.wrapper-game');
 const recordsScreen = document.querySelector('.records-screen');
 const mainScreen = document.querySelector('.main-screen');
+const aboutScreen = document.querySelector('.aboutScreen');
+const inputName = document.querySelector('#name');
+const modalSetting = document.querySelector('.modalSetting');
+const openSetting = document.querySelectorAll('.openSetting');
+const closeModal = document.querySelector('#closeModal');
+
+const playerData = {
+    name: '',
+    scores: ''
+};
 
 let currentScreen;
 let nextScreen;
+let translate;
 
+
+//перключение между экранами
 menuControlBtn.forEach(btn => {
     btn.addEventListener('click', () => {
-        if (btn.id === 'startGame') {
-            //вставить событие лоад запускающее первый lvl
-            currentScreen = mainScreen;
-            nextScreen = gameScreen;
+        switch (btn.dataset.m) {
+            case 'startGame':
+                if (inputName.value) {
+                    translate = true;
+                    currentScreen = mainScreen;
+                    nextScreen = gameScreen;
+                    playerData.name = inputName.value;
+                    inputName = '';
+                } else {
+                    inputName.placeholder = 'Обязательное поле';
+                    return;
+                }
+                break;
+
+            case 'openRecords':
+                translate = true;
+                currentScreen = mainScreen;
+                nextScreen = recordsScreen;
+                break;
+
+            case 'openAbout':
+                translate = true;
+                currentScreen = mainScreen;
+                nextScreen = aboutScreen;
+                break;
+
+            case 'back':
+                translate = false;
+                break;
         }
-        if (btn.id === 'openRecords') {
-            currentScreen = mainScreen;
-            nextScreen = recordsScreen;
-        }
-        changeScreen(currentScreen, nextScreen);
+        changeScreen(currentScreen, nextScreen, translate);
     });
 });
 
+//модальное окно настроек
+openSetting.forEach(btn => {
+    btn.addEventListener('click', () => {
+        modalSetting.classList.add('modalSetting-active');
+        modalSetting.style.display = 'block';
+        setTimeout(() => modalSetting.modalSetting.classList.add('modalSetting-active'), 500);
+    });
 
-function changeScreen(curPg, nextPg) {
-    nextPg.style.cssText = `
+});
+
+closeModal.addEventListener('click', () => {
+    modalSetting.classList.remove('modalSetting-active');
+    setTimeout(() => modalSetting.style.display = 'none', 1000);
+})
+
+
+
+
+function changeScreen(curPg, nextPg, trans = true) {
+    if (trans) {
+        nextPg.style.cssText = `
         transform: translateX(0);
-        z-index: 1;
         `;
-    curPg.style.cssText = `
+        curPg.style.cssText = `
         transform: translateX(-100%);
-        z-index: 1;
         `;
+    } else {
+        nextPg.style.cssText = `
+        transform: translateX(100%);
+        `;
+        curPg.style.cssText = `
+        transform: translateX(0);
+        `;
+    }
 }
+
 
 /*menu*/
 
@@ -52,7 +111,7 @@ cvs.height = document.documentElement.clientHeight;
 
 
 
-const stepSound = new Audio('./sound/step.mp3')
+const stepSound = new Audio('./sound/step.mp3');
 
 
 
@@ -92,6 +151,7 @@ const p = {
     name: '',
     x: 0,
     y: 0,
+    life: 3,
     view: {
         right: true,
         left: false,
@@ -188,7 +248,7 @@ window.addEventListener('load', () => {
 });
 
 //restart
-restart.addEventListener('click', clearLvl);
+restart.addEventListener('click', restartLvl);
 
 function game(lvl) {
     infoSteps.textContent = ` ${steps}`;
@@ -396,6 +456,25 @@ function winOrNo() {
         return true;
     }
     return false;
+}
+
+function restartLvl() {
+    p.life -= 1;
+    if (p.life < 0) {
+        ctx.clearRect(0, 0, cvs.width, cvs.height);
+        cvsMess('Game Over');
+        p.x = 0;
+        p.y = 0;
+        p.life = 3;
+        n = 0;
+        currentLvl = dataLvl[n].map(str => [...str]);
+        setTimeout(() => {
+            changeScreen(mainScreen, gameScreen, false);
+            start(n, currentLvl);
+        }, 2000);
+    } else {
+        clearLvl();
+    }
 }
 
 function clearLvl() {
