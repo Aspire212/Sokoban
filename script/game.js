@@ -211,6 +211,7 @@ function logic(e) {
         //заново отрисовываю пол за персом
         if (lvl[p.y][p.x] === ' ' || lvl[p.y][p.x] === '@') {
             ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
+
             ctx.drawImage(floor, p.x * sz, p.y * sz, sz, sz);
         };
         if (lvl[p.y][p.x] === 'x') {

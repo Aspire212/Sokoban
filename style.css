@@ -55,12 +55,12 @@ body {
 
 .setName {
     position: relative;
-    bottom: 200px;
+    bottom: 100px;
     display: flex;
     justify-content: space-around;
     align-items: center;
     flex-direction: column;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 button {
@@ -70,7 +70,6 @@ button {
     border-radius: 5px;
     padding: 5px;
     color: inherit;
-    font-size: 20px;
 }
 
 button:hover {
@@ -83,7 +82,6 @@ button:active {
 
 .setName>button {
     margin: 5px;
-    font-size: 20px;
 }
 
 .inputName {
@@ -98,9 +96,8 @@ button:active {
     box-shadow: white 0 0 3px;
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
-    padding: 5px;
-    font-size: 20px;
     color: white;
+    padding: 5px;
 }
 
 .inputName button {
