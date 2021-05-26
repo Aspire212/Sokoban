@@ -37,7 +37,7 @@ control.addEventListener(begin, function(e) {
   }
   document.addEventListener(run, (e) => moveAt(e))
   this.addEventListener(end, function(e) {
-    document.removeEventListener('mousemove', (e) => moveAt(e))
+    document.removeEventListener(run, (e) => moveAt(e))
   });
   //square.addEventListener('touchcancel')
 });
