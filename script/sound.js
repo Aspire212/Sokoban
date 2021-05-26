@@ -35,10 +35,10 @@ control.addEventListener(begin, function(e) {
     //mus.volume = volume / 180;
     control.style.left = `${volume}px`;
   }
-  document.addEventListener(run, (e) => moveAt(e))
-  this.addEventListener(end, function(e) {
+  document.addEventListener(run, moveAt)
+  this.addEventListener(end, (e) => {
     console.log(e)
-    document.removeEventListener(run, (e) => moveAt(e))
+    document.removeEventListener(run, moveAt)
   });
   //square.addEventListener('touchcancel')
 });
