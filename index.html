@@ -43,20 +43,29 @@
             </canvas>
         </div>
         <div class="records-screen">
-            records screen
-            <button class='menuControl' data-m='back'>back</button>
+            <button class='menuControl' data-m='back'>&times;</button>
             <!--отрисовать рекорды по запросу-->
         </div>
         <div class="aboutScreen">
-            <button class='menuControl' data-m='back'>back</button>
+            <button class='menuControl' data-m='back'>&times;</button>
             <p class="about">Sokoban (Soko-Ban, яп. 倉庫番, сокобан &#45; кладовщик) &#45; двухмерная компьютерная игра-головоломка, в которой игроку необходимо расставить ящики по обозначенным местам лабиринта. Кладовщик одновременно может двигать только один ящик, толкая
                 вперёд.
             </p>
         </div>
         <div class="modalSetting">
-            <button id="closeModal">&times;</button> volume
-            <!--модалка настроек-->
+            <button id="closeModal">&times;</button> 
+            <div class="setSound">
+              <span>Музыка</span>
+              <div class="volumeControl">
+                <div class="scale">
+                </div>
+              <div class="control">
+                <span class="strips"></span>
+              </div>
+            </div>
+            <input type="checkbox" class="onOffSound"/>
         </div>
+        
     </div>
 
 
@@ -66,6 +75,8 @@
     <!-- Project -->
     <script src="./script/menu.js"></script>
     <script src="./script/game.js"></script>
+    <script src="./script/sound.js"></script>
+
 </body>
 
 </html>
