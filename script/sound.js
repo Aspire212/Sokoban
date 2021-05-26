@@ -4,8 +4,8 @@ const control = document.querySelector('.control');
 
 const eventAction = {
   begin: 'mousedown',
-  run:  'mousemove',
-  end: 'mouseup'
+  run:   'mousemove',
+  end:   'mouseup'
 }
 
 let {begin, run, end} = eventAction
@@ -37,6 +37,7 @@ control.addEventListener(begin, function(e) {
   }
   document.addEventListener(run, (e) => moveAt(e))
   this.addEventListener(end, function(e) {
+    console.log(e)
     document.removeEventListener(run, (e) => moveAt(e))
   });
   //square.addEventListener('touchcancel')
