@@ -27,7 +27,7 @@
                 <div class="inputName">
                     <input type="text" id="name" placeholder="Введите имя">
                     <button class='menuControl' data-m='startGame'>Начать</button>
-                </div>
+               </div>
                 <button class="openSetting">Настройки</button>
                 <button class='menuControl' data-m="openRecords">Рекорды</button>
                 <button class='menuControl' data-m="openAbout">Об игре</button>
@@ -36,34 +36,42 @@
 
         <div class="wrapper-game">
             <div class="info">
-                <div>Количество шагов:<span class="steps"></span></div>
-                <div><button id='restart'>restart</button></div>
+                <div>Количество шагов:<span class="steps"></span>
+                Попытки: <span class="life"></span></div>
+                <div>
+                  <button class="openSetting">Настройки</button>
+                  <button id='restart'>Заново</button></div>
             </div>
             <canvas id="cvs">
             </canvas>
         </div>
         <div class="records-screen">
-            <button class='menuControl' data-m='back'>&times;</button>
+            <button class='menuControl' data-m='back'>Назад</button>
             <!--отрисовать рекорды по запросу-->
         </div>
         <div class="aboutScreen">
-            <button class='menuControl' data-m='back'>&times;</button>
             <p class="about">Sokoban (Soko-Ban, яп. 倉庫番, сокобан &#45; кладовщик) &#45; двухмерная компьютерная игра-головоломка, в которой игроку необходимо расставить ящики по обозначенным местам лабиринта. Кладовщик одновременно может двигать только один ящик, толкая
                 вперёд.
             </p>
+            <button class='menuControl' data-m='back'>Назад</button>
+
         </div>
         <div class="modalSetting">
             <button id="closeModal">&times;</button> 
             <div class="setSound">
               <span>Музыка</span>
-              <div class="volumeControl">
-                <div class="scale">
-                </div>
-              <div class="control">
-                <span class="strips"></span>
-              </div>
+            <div class="soundControl">
+              <input type="range" />
+              <input type="checkbox" class="onOffSound" />          
             </div>
-            <input type="checkbox" class="onOffSound"/>
+
+        </div>
+        <div class="setSound">
+          <span>Звуки</span>
+            <div class="soundControl">
+              <input type="range" />
+              <input type="checkbox" checked="true" class="onOffSound" />
+            </div>
         </div>
         
     </div>

@@ -1,12 +1,13 @@
 "use strict";
+
 const restart = document.getElementById('restart');
 const infoBlock = document.querySelector('.info');
 const infoSteps = infoBlock.querySelector('.steps');
+const infoLife = document.querySelector('.life');
 const cvs = document.getElementById('cvs');
 const ctx = cvs.getContext('2d');
 cvs.width = document.documentElement.clientWidth;
 cvs.height = document.documentElement.clientHeight;
-
 
 
 const stepSound = new Audio('./sound/step.mp3');
@@ -58,7 +59,7 @@ const p = {
         down: false,
     },
 };
-
+infoLife.textContent = p.life;
 
 const imgSprite = {};
 loadImage(imgSprite, srcImgData);
@@ -238,7 +239,7 @@ function logic(e) {
 
     if (nextLvl) {
         n++;
-        cvsMess('Stage complete')
+        cvsMess('Уровень пройден')
         setTimeout(() => clearLvl(), 1000);
     };
 
@@ -297,13 +298,13 @@ function start(n, lvl) {
     setTimeout(() => {
         ctx.clearRect(0, 0, cvs.width, cvs.height);
         game(lvl);
-    }, 2000);
+    }, 500);
 }
 //Заставка
 function splashScreen(n) {
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, ctx.width, ctx.height);
-    cvsMess(`Stage ${n + 1}`);
+    cvsMess(`Уровень ${n + 1}`);
 };
 
 function cvsMess(mess) {
@@ -367,22 +368,25 @@ function winOrNo() {
 
 function restartLvl() {
     p.life -= 1;
+    infoLife.textContent = p.life;
     if (!p.life) {
-        restart.textContent = 'Game Over'
+        restart.textContent = 'Закончить'
     }
     if (p.life < 0) {
+        infoLife.textContent = 0;
         ctx.clearRect(0, 0, cvs.width, cvs.height);
-        cvsMess('Game Over');
+        cvsMess('Вы проиграли');
         p.x = 0;
         p.y = 0;
         p.life = 3;
         n = 0;
-        restart.textContent = 'restart'
+        restart.textContent = 'Заново'
         currentLvl = dataLvl[n].map(str => [...str]);
         setTimeout(() => {
             changeScreen(mainScreen, gameScreen, false);
+              infoLife.textContent = p.life;
             start(n, currentLvl);
-        }, 2000);
+        }, 1000);
     } else {
         clearLvl();
     }

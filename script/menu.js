@@ -1,6 +1,5 @@
 /*menu*/
 'use strict';
-window.addEventListener('DOMContentLoaded', () => {
   const menuControlBtn = document.querySelectorAll('.menuControl')
   const gameScreen = document.querySelector('.wrapper-game');
   const recordsScreen = document.querySelector('.records-screen');
@@ -61,7 +60,7 @@ window.addEventListener('DOMContentLoaded', () => {
     modalSetting.classList.remove('modalSetting-active')
   })
 
-  function changeScreen(curPg, nextPg, trans = true) {
+ function changeScreen(curPg, nextPg, trans = true) {
     if (trans) {
       nextPg.style.cssText = `
         transform: translateX(0);
@@ -79,5 +78,4 @@ window.addEventListener('DOMContentLoaded', () => {
         `;
     }
   }
-})
 /*menu*/
