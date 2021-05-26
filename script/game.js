@@ -137,12 +137,12 @@ const {
 let pers = pR1;
 //делаю многомерный массив
 let currentLvl = dataLvl[n].map(str => [...str]);
- //ориентация экрпна телефона
- if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
-  console.log('Перейдите в портретный режим')
-   
-   //screen.lockOrientation('landscape')
- }
+//ориентация экрпна телефона
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
+    console.log('Перейдите в портретный режим')
+
+    //screen.lockOrientation('landscape')
+}
 //ресайз
 window.addEventListener('resize', resizeScreen);
 
@@ -224,6 +224,8 @@ function logic(e) {
         };
         if (lvl[p.y][p.x] === 'x') {
             ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
+            ctx.fillStyle = 'gray';
+            ctx.fillRect(p.x * sz, p.y * sz, sz, sz);
             ctx.drawImage(place, p.x * sz, p.y * sz, sz, sz);
         };
         //меняю координаты перса
@@ -277,7 +279,7 @@ function canMove(dx, dy, lvl) {
 function render(lvl) {
     for (let y = 0; y < lvl.length; y++) {
         for (let x = 0; x < lvl[y].length; x++) {
-            ///отрисовываю под полем сервй цвет
+            ///отрисовываю под полем серый цвет
             if (lvl[y][x] !== '.') {
                 ctx.fillStyle = 'gray';
                 ctx.fillRect(x * sz, y * sz, sz, sz);
@@ -384,7 +386,7 @@ function restartLvl() {
         currentLvl = dataLvl[n].map(str => [...str]);
         setTimeout(() => {
             changeScreen(mainScreen, gameScreen, false);
-              infoLife.textContent = p.life;
+            infoLife.textContent = p.life;
             start(n, currentLvl);
         }, 1000);
     } else {
