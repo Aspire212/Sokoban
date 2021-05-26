@@ -36,7 +36,7 @@ control.addEventListener(begin, function(e) {
     control.style.left = `${volume}px`;
   }
   document.addEventListener(run, moveAt)
-  this.addEventListener(end, (e) => {
+  document.addEventListener(end, (e) => {
     console.log(e)
     document.removeEventListener(run, moveAt)
   });
