@@ -37,7 +37,7 @@ const srcImgData = {
 //info
 let steps = 0;
 //номер уровня n+1
-let n = 0;
+let n = 3;
 
 // колтчество  ящиков уровне
 const boxLvlInfo = [1, 3, 4, 6];
@@ -136,7 +136,12 @@ const {
 let pers = pR1;
 //делаю многомерный массив
 let currentLvl = dataLvl[n].map(str => [...str]);
-
+ //ориентация экрпна телефона
+ if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  console.log('Перейдите в портретный режим')
+   
+   //screen.lockOrientation('landscape')
+ }
 //ресайз
 window.addEventListener('resize', resizeScreen);
 
