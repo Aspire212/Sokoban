@@ -1,5 +1,6 @@
 "use strict";
 
+const playerScores = document.querySelector('.playerScores');
 const restart = document.getElementById('restart');
 const infoBlock = document.querySelector('.info');
 const infoSteps = infoBlock.querySelector('.steps');
@@ -39,7 +40,8 @@ const srcImgData = {
 let steps = 0;
 //номер уровня n+1
 let n = 0;
-
+let scores = 0;
+playerScores.textContent = scores;
 // колтчество  ящиков уровне
 const boxLvlInfo = [1, 3, 4, 6];
 //размер одног блока
@@ -240,6 +242,12 @@ function logic(e) {
     nextLvl = winOrNo(lvl);
 
     if (nextLvl) {
+        playerData.scores += (boxLvlInfo[n] * 100 - steps * (10 + n - 2));
+        playerScores.textContent = playerData.scores;
+        setData(cmd, {
+            [playerData.name]: playerData.scores
+        })
+        playerData.scores = 0
         n++;
         cvsMess('Уровень пройден')
         setTimeout(() => clearLvl(), 1000);
@@ -382,6 +390,7 @@ function restartLvl() {
         p.y = 0;
         p.life = 3;
         n = 0;
+
         restart.textContent = 'Заново'
         currentLvl = dataLvl[n].map(str => [...str]);
         setTimeout(() => {
@@ -417,10 +426,5 @@ function loadedResourse() {
     /*возврщаем замкнутую переменную переменную  со значением true после загрузки всех ресурсов*/
 }
 
-function loadedLvl(v) {
-    fetch('./maps.json')
-        .then(response => response.json())
-        .then(data => data);
-}
 
 function gameInfo() {}

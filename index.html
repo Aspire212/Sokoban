@@ -25,9 +25,9 @@
             </div>
             <div class="setName">
                 <div class="inputName">
-                    <input type="text" id="name" placeholder="Введите имя">
+                    <input type="text" id="name" autocomplete="off" placeholder="Введите имя">
                     <button class='menuControl' data-m='startGame'>Начать</button>
-               </div>
+                </div>
                 <button class="openSetting">Настройки</button>
                 <button class='menuControl' data-m="openRecords">Рекорды</button>
                 <button class='menuControl' data-m="openAbout">Об игре</button>
@@ -36,11 +36,11 @@
 
         <div class="wrapper-game">
             <div class="info">
-                <div>Количество шагов:<span class="steps"></span>
-                Попытки: <span class="life"></span></div>
+                <div>Количество шагов:<span class="steps"></span> Попытки: <span class="life"></span> Очки:
+                    <span class="playerScores"></span></div>
                 <div>
-                  <button class="openSetting">Настройки</button>
-                  <button id='restart'>Заново</button></div>
+                    <button class="openSetting">Настройки</button>
+                    <button id='restart'>Заново</button></div>
             </div>
             <canvas id="cvs">
             </canvas>
@@ -57,33 +57,33 @@
 
         </div>
         <div class="modalSetting">
-            <button id="closeModal">&times;</button> 
+            <button id="closeModal">&times;</button>
             <div class="setSound">
-              <span>Музыка</span>
-            <div class="soundControl">
-              <input type="range" />
-              <input type="checkbox" class="onOffSound" />          
+                <span>Музыка</span>
+                <div class="soundControl">
+                    <input type="range" />
+                    <input type="checkbox" class="onOffSound" />
+                </div>
+
+            </div>
+            <div class="setSound">
+                <span>Звуки</span>
+                <div class="soundControl">
+                    <input type="range" />
+                    <input type="checkbox" checked="true" class="onOffSound" />
+                </div>
             </div>
 
         </div>
-        <div class="setSound">
-          <span>Звуки</span>
-            <div class="soundControl">
-              <input type="range" />
-              <input type="checkbox" checked="true" class="onOffSound" />
-            </div>
-        </div>
-        
-    </div>
 
 
 
 
 
-    <!-- Project -->
-    <script src="./script/menu.js"></script>
-    <script src="./script/game.js"></script>
-    <script src="./script/sound.js"></script>
+        <!-- Project -->
+        <script src="./script/async.js"></script>
+        <script src="./script/menu.js"></script>
+        <script src="./script/game.js"></script>
 
 </body>
 

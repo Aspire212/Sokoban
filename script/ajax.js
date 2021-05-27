@@ -1,6 +1,6 @@
 'use strict';
 
-function actionRequest(obj, getOrSet = true) {
+function setData(obj, getOrSet = true) {
     const url = 'https://fe.it-academy.by/AjaxStringStorage2.php'
     const pass = 'ret5'
     const name = 'ST_TEST_234158'
