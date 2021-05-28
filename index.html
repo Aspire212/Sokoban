@@ -46,6 +46,7 @@
             </canvas>
         </div>
         <div class="records-screen">
+            <ol class="recordsList"></ol>
             <button class='menuControl' data-m='back'>Назад</button>
             <!--отрисовать рекорды по запросу-->
         </div>
@@ -61,16 +62,16 @@
             <div class="setSound">
                 <span>Музыка</span>
                 <div class="soundControl">
-                    <input type="range" />
-                    <input type="checkbox" class="onOffSound" />
+                    <input type="range" id="musicRange" />
+                    <input type="checkbox" id="onOffMusic" />
                 </div>
 
             </div>
             <div class="setSound">
                 <span>Звуки</span>
                 <div class="soundControl">
-                    <input type="range" />
-                    <input type="checkbox" checked="true" class="onOffSound" />
+                    <input type="range" id="soundRange" />
+                    <input type="checkbox" checked="true" id="onOffSound" />
                 </div>
             </div>
 

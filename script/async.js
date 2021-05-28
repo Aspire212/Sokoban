@@ -64,25 +64,32 @@ async function setData({
         let answer;
         let addNewData;
 
-        if (!serverData.result) {
-            newParam = urlParams(l, name, pass)
-            answer = await fetchData(url, newParam)
 
-            newParam = urlParams(u, name, pass, JSON.stringify(playerData))
-            addNewData = await fetchData(url, newParam)
-        } else {
-            serverData = JSON.parse(serverData.result)
+        serverData = JSON.parse(serverData.result)
 
-            newParam = urlParams(l, name, pass)
-            answer = await fetchData(url, newParam)
-            console.log(serverData)
-            playerData = sortObj({...serverData,
-                ...playerData
-            })
-            newParam = urlParams(u, name, pass, JSON.stringify(playerData))
-            addNewData = await fetchData(url, newParam)
-        }
+        newParam = urlParams(l, name, pass)
+        answer = await fetchData(url, newParam)
+
+        console.log(serverData)
+        playerData = sortObj({...serverData,
+            ...playerData
+        })
+        newParam = urlParams(u, name, pass, JSON.stringify(playerData))
+        addNewData = await fetchData(url, newParam)
+
     } catch (err) {
         console.error(err)
     }
+}
+
+
+/*get function */
+
+async function getAndCreate(par, foo) {
+    let response = await fetch(cmd.url, cmd.urlParams('READ', cmd.name));
+    let answer = await response.json();
+    answer = JSON.parse(answer.result);
+    Object.keys(answer).forEach(key => {
+        par.append(foo(key, answer[key]))
+    })
 }
