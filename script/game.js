@@ -13,6 +13,8 @@ cvs.height = document.documentElement.clientHeight;
 
 
 const stepSound = new Audio('./sound/step.mp3');
+stepSound.volume = 0.2
+
 
 const sound = {
     step: new Audio('./sound/step.mp3'),
@@ -215,6 +217,14 @@ let pers = pR1;
 //делаю многомерный массив
 let currentLvl = dataLvl[n].map(str => [...str]);
 
+let triggerGame = 'keydown'
+
+
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+  triggerGame = 'touchstart'
+}
+
+
 //ресайз
 window.addEventListener('resize', resizeScreen);
 
@@ -230,8 +240,9 @@ restart.addEventListener('click', restartLvl);
 function game(lvl) {
     infoSteps.textContent = ` ${steps}`;
     render(lvl);
-    window.addEventListener('keydown', logic);
+    window.addEventListener(triggerGame, logic);
 };
+
 
 //основная логика игры
 function logic(e) {
@@ -245,34 +256,45 @@ function logic(e) {
     let move = 0;
     //переменная для храненияя
     let nextLvl = false;
-
+    
+    let clientX = e.touches[0].clientX / sz
+    let clientY = e.touches[0].clientY / sz
     //проверяю кнопку и меняю координаты
-    if (['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
 
-        stepSound.load();
-        stepSound.volume = 0.05
-        stepSound.addEventListener('canplaythrough', () => stepSound.play())
-            //audio step
-    };
-
-    if (route === 'ArrowRight') {
+    if (route === 'ArrowRight' ||
+        clientX >= p.x &&
+        clientY >= p.y - 2 &&
+        clientY <= p.y + 2) {
         dx = 1
         dy = 0
+        playSound(stepSound)
         steps % 2 ? pers = pR1 : pers = pR2;
     };
-    if (route === 'ArrowLeft') {
+    if (route === 'ArrowLeft' ||
+        clientX <= p.x &&
+        clientY >= p.y - 2 &&
+        clientY <= p.y + 2) {
         dx = -1;
         dy = 0
+        playSound(stepSound)
         steps % 2 ? pers = pL1 : pers = pL2;
     };
-    if (route === 'ArrowUp') {
+    if (route === 'ArrowUp' ||
+        clientY <= p.y &&
+        clientX >= p.x - 2 &&
+        clientX <= p.x + 2) {
         dx = 0;
         dy = -1;
+        playSound(stepSound)
         steps % 2 ? pers = pU1 : pers = pU2;
     };
-    if (route === 'ArrowDown') {
+    if (route === 'ArrowDown' ||
+        clientY >= p.y &&
+        clientX >= p.x - 2 &&
+        clientX <= p.x + 2) {
         dx = 0;
         dy = 1;
+        playSound(stepSound)
         steps % 2 ? pers = pD1 : pers = pD2;
     };
     //получаю данные о передвижении
@@ -280,10 +302,6 @@ function logic(e) {
     //если перс сдвинуся перерисоваю его предыдущую позицию
     if (move) {
         //координата изменялась, добавляю шаг
-        if (['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
-            steps++;
-            //audio step
-        };
 
         infoSteps.textContent = ` ${steps}`;
         //заново отрисовываю пол за персом
@@ -491,6 +509,12 @@ function loadImage(coll, data) {
         coll[name] = img;
     }
 };
+
+function playSound(sound){
+      sound.load();
+      sound.addEventListener('canplaythrough', () => sound.play())
+      //audio step
+    }
 
 function loadedResourse() {
     /*возврщаем замкнутую переменную переменную  со значением true после загрузки всех ресурсов*/
