@@ -53,7 +53,7 @@ const p = {
     x: 0,
     y: 0,
     life: 3,
-    reset: false, /// флаг для добавления кнопки рестарт в настройки
+  /// флаг для добавления кнопки рестарт в настройки
     view: {
         right: true,
         left: false,
@@ -240,7 +240,7 @@ restart.addEventListener('click', restartLvl);
 function game(lvl) {
     infoSteps.textContent = ` ${steps}`;
     render(lvl);
-    window.addEventListener(triggerGame, logic);
+    flag && window.addEventListener(triggerGame, logic);
 };
 
 
@@ -302,11 +302,12 @@ function logic(e) {
     //если перс сдвинуся перерисоваю его предыдущую позицию
     if (move) { 
         //координата изменялась, добавляю шаг
-
         infoSteps.textContent = ` ${steps}`;
         //заново отрисовываю пол за персом
         if (lvl[p.y][p.x] === ' ' || lvl[p.y][p.x] === '@') {
             ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
+            steps++;
+            //stepsoun play
             ctx.fillStyle = 'gray';
             //отрисовываю серую подложку
             ctx.fillRect(p.x * sz, p.y * sz, sz, sz);
@@ -332,7 +333,7 @@ function logic(e) {
     nextLvl = winOrNo(lvl);
 
     if (nextLvl) {
-        playerData.scores += (boxLvlInfo[n] * 100 - steps * (10 + n - 2));
+        playerData.scores += (boxLvlInfo[1+ n]  * 200 - steps );
         playerScores.textContent = playerData.scores;
         setData(cmd, {
             [playerData.name]: playerData.scores
