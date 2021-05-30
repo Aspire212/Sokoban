@@ -257,50 +257,46 @@ function logic(e) {
     //переменная для храненияя
     let nextLvl = false;
     
-    let clientX = e.touches[0].clientX / sz
-    let clientY = e.touches[0].clientY / sz
+    let clientX = e.touches[0].clientX;
+    let clientY = e.touches[0].clientY;
     //проверяю кнопку и меняю координаты
 
     if (route === 'ArrowRight' ||
-        clientX >= p.x &&
-        clientY >= p.y - 2 &&
-        clientY <= p.y + 2) {
+        clientX >= cvs.width - 100 &&
+        clientX <= cvs.width &&
+        clientY >= 100 &&
+        clientY <= cvs.width - 100) {
         dx = 1
         dy = 0
-        playSound(stepSound)
         steps % 2 ? pers = pR1 : pers = pR2;
     };
     if (route === 'ArrowLeft' ||
-        clientX <= p.x &&
-        clientY >= p.y - 2 &&
-        clientY <= p.y + 2) {
+        clientX >= 0 &&
+        clientX <= 100 &&
+        clientY >= 100 &&
+        clientY <= cvs.width - 100) {
         dx = -1;
         dy = 0
-        playSound(stepSound)
         steps % 2 ? pers = pL1 : pers = pL2;
     };
     if (route === 'ArrowUp' ||
-        clientY <= p.y &&
-        clientX >= p.x - 2 &&
-        clientX <= p.x + 2) {
+        clientY >= 30 &&
+        clientY <= 130) {
         dx = 0;
         dy = -1;
-        playSound(stepSound)
         steps % 2 ? pers = pU1 : pers = pU2;
     };
     if (route === 'ArrowDown' ||
-        clientY >= p.y &&
-        clientX >= p.x - 2 &&
-        clientX <= p.x + 2) {
+        clientY >= cvs.height - 70 &&
+        clientY <= cvs.height) {
         dx = 0;
         dy = 1;
-        playSound(stepSound)
         steps % 2 ? pers = pD1 : pers = pD2;
     };
     //получаю данные о передвижении
     move = canMove(dx, dy, lvl);
     //если перс сдвинуся перерисоваю его предыдущую позицию
-    if (move) {
+    if (move) { 
         //координата изменялась, добавляю шаг
 
         infoSteps.textContent = ` ${steps}`;
@@ -321,6 +317,8 @@ function logic(e) {
         //меняю координаты перса
         p.x += dx;
         p.y += dy;
+        //playSound(stepSound)
+        
         //заново отрисовываю элемент под персом
         draw(lvl[p.y][p.x], p.x, p.y, sz);
         //отрисовываю перса в новом месте
