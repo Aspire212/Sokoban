@@ -17,6 +17,7 @@ const playerData = {
 let currentScreen;
 let nextScreen;
 let translate;
+
 //перключение между экранами
 menuControlBtn.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -28,6 +29,7 @@ menuControlBtn.forEach(btn => {
                     nextScreen = gameScreen;
                     playerData.name = inputName.value;
                     inputName.value = '';
+                    mutedStep()
                 } else {
                     inputName.placeholder = 'Обязательное поле';
                     return;

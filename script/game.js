@@ -11,15 +11,12 @@ const ctx = cvs.getContext('2d');
 cvs.width = document.documentElement.clientWidth;
 cvs.height = document.documentElement.clientHeight;
 
-
+//звуки
 const stepSound = new Audio('./sound/step.mp3');
+const music = new Audio('./sound/lvlmus.mp3');
+stepSound.muted = true;
 stepSound.volume = 0.05
 
-
-const sound = {
-    step: new Audio('./sound/step.mp3'),
-    lvlmus: new Audio('./sound/lvlmus.mp3'),
-};
 ///src картинок
 const srcImgData = {
     pD1: './img/Player/player_06.png',
@@ -43,9 +40,9 @@ let n = 0;
 let scores = 0;
 playerScores.textContent = scores;
 // колтчество  ящиков уровне
-const boxLvlInfo = [1, 3, 4, 6];
+const boxLvlInfo = [1, 3, 4, 6, 11];
 //размер одног блока
-let sz = cvs.width / 13;
+let sz = cvs.height / 13;
 
 infoBlock.style.height = sz + 'px';
 //p - player данные о персе
@@ -54,7 +51,6 @@ const p = {
     x: 0,
     y: 0,
     life: 3,
-  /// флаг для добавления кнопки рестарт в настройки
     view: {
         right: true,
         left: false,
@@ -66,39 +62,63 @@ infoLife.textContent = p.life;
 
 const imgSprite = {};
 loadImage(imgSprite, srcImgData);
+
+//деструктуризирую ключи к картинкам для доступности
+const {
+    pD1,
+    pD2,
+    pU1,
+    pU2,
+    pR1,
+    pR2,
+    pL1,
+    pL2,
+    brick,
+    box,
+    floor,
+    place,
+    success,
+} = imgSprite;
+//запускаю игру по загрузки ресурсов
+let pers = pR1;
+
+let triggerGame = 'keydown'
+let objEvent = window;
+
 const dataLvl = [
     [
-        "....................",
-        "....................",
-        ".........########...",
-        ".........#     x#...",
-        ".........# @  * #...",
-        ".........#      #...",
-        ".........########...",
+        "...................",
+        "...................",
+        "........########...",
+        "........#     x#...",
+        "........# @  * #...",
+        "........#      #...",
+        "........########...",
         "...................."
     ],
 
     [
-        "....................",
-        "....................",
-        ".........########...",
-        ".........#     x#...",
-        ".........# * **x#...",
-        ".........#x  # @#...",
-        ".........########...",
-        "...................."
+        "...................",
+        "...................",
+        "........########...",
+        "........#     x#...",
+        "........# * **x#...",
+        "........#x  # @#...",
+        "........########...",
+        "..................."
     ],
     [
-        "........................",
-        ".........###########....",
-        ".........#         #....",
-        ".........# *       #....",
-        ".........# @  *## ##....",
-        ".........#     #   #....",
-        ".........# **  #  x#....",
-        ".........#     #xxx#....",
-        ".........###########....",
-        "........................",
+        "......................",
+        "......................",
+        ".......###########....",
+        ".......#         #....",
+        ".......# *       #....",
+        ".......# @  *## ##....",
+        ".......#     #   #....",
+        ".......# **  #  x#....",
+        ".......#     #xxx#....",
+        ".......###########....",
+        ".......................",
     ],
 
     [
@@ -114,20 +134,6 @@ const dataLvl = [
         "....##### ### #@##  xx#.",
         "........#     #########.",
         "........#######.........",
-        "........................",
-    ],
-    [
-        "........................",
-        ".....############.......",
-        ".....#xx  #     ###.....",
-        ".....#xx  # *  *  #.....",
-        ".....#xx  #*####  #.....",
-        ".....#xx    @ ##  #.....",
-        ".....#xx  # #  * ##.....",
-        ".....###### ##* * #.....",
-        ".......# *  * * * #.....",
-        ".......#    #     #.....",
-        ".......############.....",
         "........................",
     ],
 
@@ -195,35 +201,30 @@ const dataLvl = [
         "........................",
     ],
 
+    [
+        "........................",
+        ".....############........",
+        ".....#xx  #     ####.....",
+        ".....#xx  # *  *   #.....",
+        ".....#xx  #*####   #.....",
+        ".....#xx    @ ##   #.....",
+        ".....#xx  # #  *  ##.....",
+        ".....###### ##* *  #.....",
+        ".......# *  * * *  #.....",
+        ".......#    #      #.....",
+        ".......#############....",
+        "........................",
+    ],
+
 ];
 
-//деструктуризирую ключи к картинкам для доступности
-const {
-    pD1,
-    pD2,
-    pU1,
-    pU2,
-    pR1,
-    pR2,
-    pL1,
-    pL2,
-    brick,
-    box,
-    floor,
-    place,
-    success,
-} = imgSprite;
-//запускаю игру по загрузки ресурсов
-let pers = pR1;
+
 //делаю многомерный массив
 let currentLvl = dataLvl[n].map(str => [...str]);
 
-let triggerGame = 'keydown'
-let objEvent = window;
-
 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-  triggerGame = 'touchstart';
-  objEvent = cvs;
+    triggerGame = 'touchstart';
+    objEvent = cvs;
 }
 
 
@@ -258,12 +259,12 @@ function logic(e) {
     let move = 0;
     //переменная для храненияя
     let nextLvl = false;
-    
+
     let clientX;
     let clientY;
-    if(e.touches){
-      clientX = e.touches[0].clientX;
-      clientY = e.touches[0].clientY;
+    if (e.touches) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
     }
     //проверяю кнопку и меняю координаты
 
@@ -275,7 +276,6 @@ function logic(e) {
         dx = 1
         dy = 0
         steps++
-        playSound(stepSound)
         steps % 2 ? pers = pR1 : pers = pR2;
     };
     if (route === 'ArrowLeft' ||
@@ -286,17 +286,15 @@ function logic(e) {
         dx = -1;
         dy = 0
         steps++
-        playSound(stepSound)
         steps % 2 ? pers = pL1 : pers = pL2;
     };
     if (route === 'ArrowUp' ||
         clientY >= 30 &&
         clientY <= 130) {
-        console.log("up")
+
         dx = 0;
         dy = -1;
         steps++
-        playSound(stepSound)
         steps % 2 ? pers = pU1 : pers = pU2;
     };
     if (route === 'ArrowDown' ||
@@ -305,19 +303,19 @@ function logic(e) {
         dx = 0;
         dy = 1;
         steps++
-        playSound(stepSound)
         steps % 2 ? pers = pD1 : pers = pD2;
     };
     //получаю данные о передвижении
     move = canMove(dx, dy, lvl);
     //если перс сдвинуся перерисоваю его предыдущую позицию
-    if (move) { 
+    if (move) {
+        let oX = p.x;
+        let oY = p.y;
         //координата изменялась, добавляю шаг
         infoSteps.textContent = ` ${steps}`;
         //заново отрисовываю пол за персом
         if (lvl[p.y][p.x] === ' ' || lvl[p.y][p.x] === '@') {
             ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
-            //stepsoun
             ctx.fillStyle = 'gray';
             //отрисовываю серую подложку
             ctx.fillRect(p.x * sz, p.y * sz, sz, sz);
@@ -332,8 +330,11 @@ function logic(e) {
         //меняю координаты перса
         p.x += dx;
         p.y += dy;
+
+        if (oX < p.x || oY < p.y ||
+            oX > p.x || oY > p.y) playSound(stepSound);
         //playSound(stepSound)
-        
+
         //заново отрисовываю элемент под персом
         draw(lvl[p.y][p.x], p.x, p.y, sz);
         //отрисовываю перса в новом месте
@@ -343,7 +344,7 @@ function logic(e) {
     nextLvl = winOrNo(lvl);
 
     if (nextLvl) {
-        playerData.scores += (boxLvlInfo[1+ n]  * 200 - steps );
+        playerData.scores += (boxLvlInfo[1 + n] * 200 - steps);
         playerScores.textContent = playerData.scores;
         setData(cmd, {
             [playerData.name]: playerData.scores
@@ -429,7 +430,7 @@ function resizeScreen() {
     ctx.clearRect(0, 0, ctx.width, ctx.height);
     cvs.width = document.documentElement.clientWidth;
     cvs.height = document.documentElement.clientHeight;
-    sz = cvs.height / 13.;
+    sz = cvs.height / 13;
     infoBlock.style.height = sz + 'px';
     game(currentLvl);
 };
@@ -523,15 +524,11 @@ function loadImage(coll, data) {
     }
 };
 
-function playSound(sound){
-      sound.load();
-      sound.addEventListener('canplaythrough', () => sound.play())
-      //audio step
-    }
-
-function loadedResourse() {
-    /*возврщаем замкнутую переменную переменную  со значением true после загрузки всех ресурсов*/
+function playSound(sound) {
+    sound.load();
+    sound.addEventListener('canplaythrough', () => sound.play())
 }
 
-
-function gameInfo() {}
+function mutedStep() {
+    stepSound.muted = !stepSound.muted
+}

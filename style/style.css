@@ -174,6 +174,25 @@ button:active {
     opacity: 0;
 }
 
+.setSound {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.setSound span {
+    display: block;
+    width: 50%;
+}
+
+.setting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 20%;
+}
+
 .about {
     margin: 50px auto;
     padding: 5px;
@@ -184,6 +203,7 @@ button:active {
     position: absolute;
     top: 10px;
     right: 10px;
+    font-size: 25px;
 }
 
 .modalSetting-active {
@@ -200,6 +220,9 @@ button:active {
 
 .recordsList {
     width: 20vw;
+    max-height: 60%;
+    overflow: scroll;
+    padding: 0 10px;
 }
 
 .recordsItem {
@@ -210,19 +233,117 @@ button:active {
 
 /*volume*/
 
-.setSound {
+#volumeControl {
+    width: 100px;
+    height: 50px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 25px;
-    width: 100%;
+    justify-content: center;
+    position: relative;
 }
 
-.volumeControl {
+.scale {
+    height: 6px;
+    width: 100%;
+    border-radius: 20px;
+    background: rgba(255, 200, 200, 0.4);
+    box-shadow: inset 0 0 5px white;
+}
+
+.vControl {
+    height: 30px;
+    width: 10px;
+    background: #2DCC48;
+    position: absolute;
+    top: calc(50% - 15px);
+    left: calc(50% - 5px);
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.strips {
+    background: #42445A;
+    box-shadow: inset 0 0 1px white;
+    position: relative;
+    height: 1px;
+    width: 8px !important;
+}
+
+.strips::before {
+    content: "";
+    width: 8px;
+    height: 1px;
+    background: #42445A;
+    box-shadow: inset 0 0 1px white;
+    position: absolute;
+    top: 3px;
+}
+
+.strips::after {
+    content: "";
+    width: 8px;
+    height: 1px;
+    background: #42445A;
+    box-shadow: inset 0 0 1px white;
+    position: absolute;
+    bottom: 3px;
+}
+
+
+/*chebx*/
+
+.wrapper-chbx {
+    color: #CCCCCC;
+    margin-left: 10px;
     display: flex;
     align-items: center;
-    width: 0%;
-    justify-content: space-between;
+}
+
+.chbx {
+    display: none;
+}
+
+.chbx+.faund {
+    background: #DB836F;
+    width: 32px;
+    height: 16px;
+    display: inline-block;
+    border-radius: 10px;
+    position: relative;
+    margin-left: 5px;
+    box-shadow: inset 0 0 3px #484E88;
+}
+
+.chbx:checked+.faund {
+    background: green;
+    transition: background .3s ease-in-out;
+}
+
+.chbx+.faund::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #E7E7E7;
+    box-shadow: inset 0 0 3px #484E88;
+    transition: left .3s ease-in-out;
+}
+
+.chbx:checked+.faund::before {
+    left: calc(100% - 16px);
+}
+
+@media screen and (max-width: 900px) {
+    .setName {
+        bottom: 20px;
+    }
 }
 
 @keyframes wiggle {

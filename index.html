@@ -61,17 +61,45 @@
             <button id="closeModal">&times;</button>
             <div class="setSound">
                 <span>Музыка</span>
-                <div class="soundControl">
-                    <input type="range" id="musicRange" />
-                    <input type="checkbox" id="onOffMusic" />
-                </div>
+                <div class="setting">
+                    <div class="soundControl">
+                        <div id="volumeControl">
+                            <div class="scale">
 
+                            </div>
+
+                            <div data-s='music' class="vControl">
+                                <span class="strips"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <label class="wrapper-chbx">
+                        <input type="checkbox" class="chbx" id="toggleMusic" />
+                        <span class="faund"></span>
+                      </label>
+                </div>
             </div>
             <div class="setSound">
                 <span>Звуки</span>
-                <div class="soundControl">
-                    <input type="range" id="soundRange" />
-                    <input type="checkbox" checked="true" id="onOffSound" />
+                <div class="setting">
+                    <div class="soundControl">
+                        <div id="volumeControl">
+                            <div class="scale">
+
+                            </div>
+                            <div data-s='sound' class="vControl">
+                                <span class="strips"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <label class="wrapper-chbx">
+                        <input type="checkbox" class="chbx" checked="true" id="toggleSound" />
+                        <span class="faund"></span>
+                      </label>
+
+
                 </div>
             </div>
 
@@ -85,6 +113,7 @@
         <script src="./script/async.js"></script>
         <script src="./script/menu.js"></script>
         <script src="./script/game.js"></script>
+        <script src="./script/sound.js"></script>
 
 </body>
 
