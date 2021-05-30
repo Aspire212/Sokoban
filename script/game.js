@@ -257,8 +257,8 @@ function logic(e) {
     //переменная для храненияя
     let nextLvl = false;
     
-    let clientX = e.touches[0].clientX;
-    let clientY = e.touches[0].clientY;
+    let clientX = null || e.touches[0].clientX;
+    let clientY = null || e.touches[0].clientY;
     //проверяю кнопку и меняю координаты
 
     if (route === 'ArrowRight' ||
