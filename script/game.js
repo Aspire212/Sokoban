@@ -45,7 +45,8 @@ playerScores.textContent = scores;
 // колтчество  ящиков уровне
 const boxLvlInfo = [1, 3, 4, 6];
 //размер одног блока
-let sz = cvs.width / 28;
+let sz = cvs.width / 13;
+
 infoBlock.style.height = sz + 'px';
 //p - player данные о персе
 const p = {
@@ -307,7 +308,7 @@ function logic(e) {
         if (lvl[p.y][p.x] === ' ' || lvl[p.y][p.x] === '@') {
             ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
             steps++;
-            //stepsoun play
+            //stepsoun
             ctx.fillStyle = 'gray';
             //отрисовываю серую подложку
             ctx.fillRect(p.x * sz, p.y * sz, sz, sz);
@@ -419,7 +420,7 @@ function resizeScreen() {
     ctx.clearRect(0, 0, ctx.width, ctx.height);
     cvs.width = document.documentElement.clientWidth;
     cvs.height = document.documentElement.clientHeight;
-    sz = cvs.width / 28;
+    sz = cvs.height / 13.;
     infoBlock.style.height = sz + 'px';
     game(currentLvl);
 };
