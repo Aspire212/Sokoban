@@ -13,7 +13,7 @@ cvs.height = document.documentElement.clientHeight;
 
 
 const stepSound = new Audio('./sound/step.mp3');
-stepSound.volume = 0.2
+stepSound.volume = 0.05
 
 
 const sound = {
@@ -219,17 +219,18 @@ let pers = pR1;
 let currentLvl = dataLvl[n].map(str => [...str]);
 
 let triggerGame = 'keydown'
-
+let objEvent = window;
 
 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-  triggerGame = 'touchstart'
+  triggerGame = 'touchstart';
+  objEvent = cvs;
 }
 
 
 //ресайз
 window.addEventListener('resize', resizeScreen);
 
-//первый запуск
+//первый запускu
 window.addEventListener('load', () => {
     start(n, currentLvl)
 
@@ -241,7 +242,7 @@ restart.addEventListener('click', restartLvl);
 function game(lvl) {
     infoSteps.textContent = ` ${steps}`;
     render(lvl);
-    flag && window.addEventListener(triggerGame, logic);
+    objEvent.addEventListener(triggerGame, logic);
 };
 
 
@@ -273,6 +274,8 @@ function logic(e) {
         clientY <= cvs.width - 100) {
         dx = 1
         dy = 0
+        steps++
+        playSound(stepSound)
         steps % 2 ? pers = pR1 : pers = pR2;
     };
     if (route === 'ArrowLeft' ||
@@ -282,13 +285,18 @@ function logic(e) {
         clientY <= cvs.width - 100) {
         dx = -1;
         dy = 0
+        steps++
+        playSound(stepSound)
         steps % 2 ? pers = pL1 : pers = pL2;
     };
     if (route === 'ArrowUp' ||
         clientY >= 30 &&
         clientY <= 130) {
+        console.log("up")
         dx = 0;
         dy = -1;
+        steps++
+        playSound(stepSound)
         steps % 2 ? pers = pU1 : pers = pU2;
     };
     if (route === 'ArrowDown' ||
@@ -296,6 +304,8 @@ function logic(e) {
         clientY <= cvs.height) {
         dx = 0;
         dy = 1;
+        steps++
+        playSound(stepSound)
         steps % 2 ? pers = pD1 : pers = pD2;
     };
     //получаю данные о передвижении
@@ -307,7 +317,6 @@ function logic(e) {
         //заново отрисовываю пол за персом
         if (lvl[p.y][p.x] === ' ' || lvl[p.y][p.x] === '@') {
             ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
-            steps++;
             //stepsoun
             ctx.fillStyle = 'gray';
             //отрисовываю серую подложку
