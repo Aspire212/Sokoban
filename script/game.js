@@ -16,6 +16,7 @@ const stepSound = new Audio('./sound/step.mp3');
 const music = new Audio('./sound/lvlmus.mp3');
 stepSound.muted = true;
 stepSound.volume = 0.05
+music.volume = 0.5;
 
 ///src картинок
 const srcImgData = {
