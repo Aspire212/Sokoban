@@ -357,10 +357,10 @@ button:active {
 
 @media screen and (max-height: 900px) {
     .logo {
-        bottom: 30px;
+        bottom: 50px;
     }
     .setName {
-        bottom: 20px;
+        bottom: 30px;
     }
 }
 
