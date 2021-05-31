@@ -47,9 +47,7 @@ controlAll.forEach(control => {
 
             }
             document.addEventListener(run, moveAt)
-            window.addEventListener(end, function(e) {
-                document.removeEventListener(run, moveAt)
-            });
+            window.addEventListener(end, (e) => document.removeEventListener(run, moveAt));
         });
     });
 
