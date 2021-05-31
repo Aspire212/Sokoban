@@ -36,6 +36,10 @@ menuControlBtn.forEach(btn => {
                 }
                 break;
             case 'openRecords':
+                let recordLi = recordsList.querySelectorAll('li')
+                if (recordLi) {
+                    recordLi.forEach(li => recordsList.removeChild(li))
+                }
                 getAndCreate(recordsList, createListEl)
                 translate = true;
                 currentScreen = mainScreen;
