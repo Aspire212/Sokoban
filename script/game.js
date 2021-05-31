@@ -423,9 +423,9 @@ function splashScreen(n) {
 };
 
 function cvsMess(mess) {
-    ctx.font = "30px Arial";
-    ctx.fillStyle = '#fff';
+    ctx.font = "22px  Dosis, Source Sans Pro, Helvetica Neue, Arial, sans-serif";
     ctx.textAlign = 'center';
+    ctx.fillStyle = 'yellowgreen';
     ctx.fillText(mess, cvs.width / 2, cvs.height / 2 - 30);
 }
 

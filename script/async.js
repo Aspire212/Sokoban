@@ -89,7 +89,7 @@ async function getAndCreate(par, foo) {
     let response = await fetch(cmd.url, cmd.urlParams('READ', cmd.name));
     let answer = await response.json();
     answer = JSON.parse(answer.result);
-    Object.keys(answer).forEach(key => {
-        par.append(foo(key, answer[key]))
+    Object.keys(answer).forEach((key, i) => {
+        par.append(foo(key, i, answer[key]))
     })
 }

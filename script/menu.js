@@ -81,12 +81,14 @@ function changeScreen(curPg, nextPg, trans = true) {
     }
 }
 
-function createListEl(key, value) {
+function createListEl(key, idx, value) {
     let li = document.createElement('li');
     let kSpan = document.createElement('span');
     let vSpan = document.createElement('span');
+    kSpan.style.color = 'yellowgreen';
+    vSpan.style.color = 'violet';
     li.classList.add('recordsItem');
-    kSpan.textContent = key;
+    kSpan.textContent = `${idx + 1}.  ${key}`;
     vSpan.textContent = value;
     li.append(kSpan);
     li.append(vSpan);
