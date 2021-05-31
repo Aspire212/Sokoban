@@ -36,11 +36,11 @@ menuControlBtn.forEach(btn => {
                 }
                 break;
             case 'openRecords':
-                let recordLi = recordsList.querySelectorAll('li')
+                let recordLi = recordsList.querySelectorAll('li');
                 if (recordLi) {
-                    recordLi.forEach(li => recordsList.removeChild(li))
+                    recordLi.forEach(li => recordsList.removeChild(li));
                 }
-                getAndCreate(recordsList, createListEl)
+                getAndCreate(recordsList, createListEl);
                 translate = true;
                 currentScreen = mainScreen;
                 nextScreen = recordsScreen;
@@ -60,11 +60,11 @@ menuControlBtn.forEach(btn => {
 //модальное окно настроек
 openSetting.forEach(btn => {
     btn.addEventListener('click', () => {
-        modalSetting.classList.add('modalSetting-active')
+        modalSetting.classList.add('modalSetting-active');
     });
 });
 closeModal.addEventListener('click', () => {
-    modalSetting.classList.remove('modalSetting-active')
+    modalSetting.classList.remove('modalSetting-active');
 })
 
 function changeScreen(curPg, nextPg, trans = true) {

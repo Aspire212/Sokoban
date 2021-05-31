@@ -359,8 +359,8 @@ function logic(e) {
             setTimeout(() => {
                 changeScreen(mainScreen, gameScreen, false);
                 n = 0;
-                scores = 0
-                clearLvl()
+                scores = 0;
+                clearLvl();
             }, 2000);
         } else {
             ctx.clearRect(0, 0, cvs.width, cvs.height);

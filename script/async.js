@@ -68,7 +68,6 @@ async function setData({
             newParam = urlParams(u, name, pass, JSON.stringify(playerData))
             addNewData = await fetchData(url, newParam)
         } else {
-            console.log(serverData)
             serverData = JSON.parse(serverData.result)
 
             newParam = urlParams(l, name, pass)
