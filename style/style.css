@@ -342,6 +342,9 @@ button:active {
 }
 
 @media screen and (max-width: 900px) {
+    * {
+        font-size: 14px;
+    }
     .setName {
         bottom: 20px;
     }
