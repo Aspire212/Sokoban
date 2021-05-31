@@ -347,7 +347,7 @@ function logic(e) {
     nextLvl = winOrNo(lvl);
 
     if (nextLvl) {
-        playerData.scores += ((boxLvlInfo[n] + 1) * 200 - steps);
+        playerData.scores += ((boxLvlInfo[n] + 1) * 200 - Math.floor(steps / 2));
         playerScores.textContent = playerData.scores;
         setData(cmd, {
             [playerData.name]: playerData.scores
