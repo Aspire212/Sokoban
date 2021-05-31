@@ -39,7 +39,7 @@ const cmd = {
                 obj[key] === el ? newObj[key] = el : false)
         })
         return newObj
-    }
+    },
 }
 
 /*------set new data-------------------*/
