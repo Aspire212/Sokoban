@@ -6,7 +6,7 @@ const cmd = {
     u: 'UPDATE',
     l: 'LOCKGET',
     pass: 'ret5',
-    name: 'ST_TEST_234149',
+    name: 'ST_TEST_234170',
     url: 'https://fe.it-academy.by/AjaxStringStorage2.php',
 
     urlParams(f, n, p, v) {
@@ -59,23 +59,27 @@ async function setData({
 
     try {
         let serverData = await fetchData(url, urlParams(r, name))
-        console.log(serverData)
         let newParam;
         let answer;
         let addNewData;
+        if (!serverData.result) {
+            newParam = urlParams(l, name, pass)
+            answer = await fetchData(url, newParam)
+            newParam = urlParams(u, name, pass, JSON.stringify(playerData))
+            addNewData = await fetchData(url, newParam)
+        } else {
+            serverData = JSON.parse(serverData.result)
 
+            newParam = urlParams(l, name, pass)
+            answer = await fetchData(url, newParam)
 
-        serverData = JSON.parse(serverData.result)
+            playerData = sortObj({...serverData,
+                ...playerData
+            })
+            newParam = urlParams(u, name, pass, JSON.stringify(playerData))
+            addNewData = await fetchData(url, newParam)
+        }
 
-        newParam = urlParams(l, name, pass)
-        answer = await fetchData(url, newParam)
-
-        console.log(serverData)
-        playerData = sortObj({...serverData,
-            ...playerData
-        })
-        newParam = urlParams(u, name, pass, JSON.stringify(playerData))
-        addNewData = await fetchData(url, newParam)
 
     } catch (err) {
         console.error(err)

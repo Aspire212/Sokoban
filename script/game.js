@@ -40,7 +40,7 @@ let n = 0;
 let scores = 0;
 playerScores.textContent = scores;
 // колтчество  ящиков уровне
-const boxLvlInfo = [1, 2, 3, 4, 6, 8, 9, 10, 11];
+const boxLvlInfo = [1, 2, 3, 4, 6, 8, 9, 10, 11, 1];
 //размер одног блока
 let sz = cvs.height / 14;
 
@@ -86,6 +86,7 @@ let triggerGame = 'keydown'
 let objEvent = window;
 
 const dataLvl = [
+
     [
         "......................",
         "......................",
@@ -180,22 +181,6 @@ const dataLvl = [
 
 
     [
-        "..........................",
-        ".........#######..###........",
-        ".........#xx  #.##@##.......",
-        ".........#xx  ###   #.......",
-        ".........#xx*    ** #.......",
-        ".........#xx  # # * #.......",
-        ".........#xx# # #   #.......",
-        ".........#### * #*  #.......",
-        "............#  *  * #.......",
-        "............# *  *  #.......",
-        "............#  ##   #.......",
-        "............#########.......",
-        "............................",
-    ],
-
-    [
         "........................",
         ".....############........",
         ".....#xx  #     ####.....",
@@ -222,6 +207,18 @@ const dataLvl = [
         "..##xxxx * ##########....",
         "..#########..............",
         ".........................",
+    ],
+
+
+    [
+        "......................",
+        "......................",
+        "..........########....",
+        "..........#     x#....",
+        "..........# @  * #....",
+        "..........#      #....",
+        "..........########....",
+        "......................",
     ],
 
 
@@ -329,6 +326,7 @@ function logic(e) {
         };
         if (lvl[p.y][p.x] === 'x') {
             ctx.clearRect(p.x * sz, p.y * sz, sz, sz);
+            ctx.drawImage(floor, p.x * sz, p.y * sz, sz, sz);
             ctx.drawImage(place, p.x * sz, p.y * sz, sz, sz);
         };
         //меняю координаты перса
@@ -348,15 +346,27 @@ function logic(e) {
     nextLvl = winOrNo(lvl);
 
     if (nextLvl) {
-        playerData.scores += (boxLvlInfo[1 + n] * 200 - steps);
+        playerData.scores += ((boxLvlInfo[n] + 1) * 200 - steps);
         playerScores.textContent = playerData.scores;
         setData(cmd, {
             [playerData.name]: playerData.scores
         })
         playerData.scores = 0
         n++;
-        cvsMess('Уровень пройден')
-        setTimeout(() => clearLvl(), 1000);
+        if (n === boxLvlInfo.length) {
+            ctx.clearRect(0, 0, cvs.width, cvs.height);
+            cvsMess('Вы прошли игру!')
+            setTimeout(() => {
+                changeScreen(mainScreen, gameScreen, false);
+                n = 0;
+                scores = 0
+                clearLvl()
+            }, 2000);
+        } else {
+            ctx.clearRect(0, 0, cvs.width, cvs.height);
+            cvsMess('Уровень пройден')
+            setTimeout(() => clearLvl(), 1000);
+        }
     };
 
 };
@@ -417,8 +427,7 @@ function start(n, lvl) {
 }
 //Заставка
 function splashScreen(n) {
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0, 0, ctx.width, ctx.height);
+    ctx.clearRect(0, 0, cvs.width, cvs.height);
     cvsMess(`Уровень ${n + 1}`);
 };
 
@@ -430,7 +439,7 @@ function cvsMess(mess) {
 }
 
 function resizeScreen() {
-    ctx.clearRect(0, 0, ctx.width, ctx.height);
+    ctx.clearRect(0, 0, cvs.width, cvs.height);
     cvs.width = document.documentElement.clientWidth;
     cvs.height = document.documentElement.clientHeight;
     sz = cvs.height / 14;
@@ -466,16 +475,16 @@ function draw(sym, x, y, sz) {
     return ctx.drawImage(img, x * sz, y * sz, sz, sz);
 }
 
-
 //проверка выйграл ли игроркs
-function winOrNo() {
+function winOrNo(lvl) {
     //количество площадок на уровне
     let xPlace = 0;
-    currentLvl.forEach(lvlArr => lvlArr.forEach(
+    lvl.forEach(lvlArr => lvlArr.forEach(
         el => {
             el === '%' && xPlace++
         }));
     if (xPlace === boxLvlInfo[n]) {
+
         return true;
     }
     return false;

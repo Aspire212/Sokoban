@@ -226,7 +226,7 @@ button:active {
 .recordsList {
     width: 20vw;
     max-height: 60%;
-    overflow: scroll;
+    overflow: auto;
     padding: 0 10px;
     list-style-type: none;
 }
@@ -351,7 +351,16 @@ button:active {
         bottom: 30px;
     }
     .setName {
+        bottom: 20px;
+    }
+}
+
+@media screen and (max-height: 900px) {
+    .logo {
         bottom: 30px;
+    }
+    .setName {
+        bottom: 20px;
     }
 }
 
