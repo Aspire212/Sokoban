@@ -35,14 +35,14 @@ controlAll.forEach(control => {
                 if (volume <= 0) {
                     volume = 0;
                 }
-
+    
                 control.style.left = `${ volume }px`;
 
                 if (control.dataset.s === 'sound') {
-                    stepSound.volume = volume / 180;
+                    stepSound.volume = volume / 100;
                 }
                 if (control.dataset.s === 'music') {
-                    music.volume = volume / 180;
+                    music.volume = volume / 100;
                 }
 
             }
